@@ -1,20 +1,21 @@
-import express, {
-  Application,
-  json,
-} from "express";
+import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import { getAll, getByFilters, getCarByID } from "./services";
+import { addCar, deleteCar, editCar, getByFilters, getCarByID, getCars } from "./services";
 //For env File
 dotenv.config();
-
 const app: Application = express();
 const port = process.env.PORT || 8003;
 
 app.use(json());
-app.get("/", getAll);
+app.get("/", getCars);
 app.get("/:id", getCarByID);
-app.get("/filter", getByFilters);
 
+// Middleware:
+
+app.post("/", addCar);
+app.put("/:id", editCar);
+
+app.delete("/:id", deleteCar);
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
