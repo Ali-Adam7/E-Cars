@@ -1,4 +1,4 @@
-export interface car {
+export interface car { // define what a car is
   id: number;
   model: string;
   make: string;
@@ -10,7 +10,7 @@ export interface car {
   milage: number;
 }
 
-export interface filter {
+export interface filter { // define the filter of a car
   model?: string;
   make?: string;
   type?: string;

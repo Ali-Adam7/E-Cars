@@ -2,16 +2,16 @@ import { RequestHandler } from "express";
 import { car } from "./model";
 import { DAO } from "./DAO";
 
-const dao = new DAO();
-dao.createConnection();
+const dao = new DAO(); //make an object from DAO to create connection
+dao.createConnection(); // create  
 
-export const getCars: RequestHandler = async (req, res) => {
+export const getCars: RequestHandler = async (req, res) => { // router request from the DAO to get data from the database
   try {
-    if (!Object.keys(req.query).length) {
-      const cars = await dao.getAllCars();
+    if (!Object.keys(req.query).length) { // check the query if its empty then get all cars
+      const cars = await dao.getAllCars(); //syncrinize to get the cars
       res.json(cars);
     } else {
-      getByFilters(req, res, () => {});
+      getByFilters(req, res, () => {}); // run the getByFilters function
     }
   } catch (error: any) {
     res.send(error.sqlMessage);

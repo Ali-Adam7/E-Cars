@@ -1,14 +1,14 @@
 import { car, filter } from "./model";
-const mysql = require("mysql2/promise");
-import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
+const mysql = require("mysql2/promise"); // make connection to the database
+import dotenv from "dotenv"; // process librlary 
+import fs from "fs"; // file system libr
+import path from "path"; // path libr
 dotenv.config();
 
-export class DAO {
+export class DAO { // thsi is a class with some attributes
   connection: any;
   createConnection = async () => {
-    this.connection = await mysql.createConnection({
+    this.connection = await mysql.createConnection({ // talk to the database on creating the connection
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       user: process.env.DB_USER,
@@ -20,10 +20,10 @@ export class DAO {
 
     // initlize the sql db:
 
-    const dataSql = fs.readFileSync(path.join(__dirname, "/db/init.sql")).toString();
-    const query = await this.connection.query(dataSql);
+    const dataSql = fs.readFileSync(path.join(__dirname, "/db/init.sql")).toString(); //get the init.sql file and turn it into a query string
+    const query = await this.connection.query(dataSql); // execute the query above
   };
-  getAllCars = async (): Promise<car[] | string> => {
+  getAllCars = async (): Promise<car[] | string> => { // talking to the query
     try {
       let [rows, fields] = await this.connection.execute("SELECT * FROM catalog.cars");
       return rows;
