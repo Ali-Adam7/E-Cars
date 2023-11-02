@@ -20,11 +20,14 @@ export class DAO {
     });
 
     // initlize the sql db:
-
-    const dataSql = fs
-      .readFileSync(path.join(__dirname, "/db/init.sql"))
-      .toString();
-    const query = await this.connection.query(dataSql);
+    try {
+      const dataSql = fs
+        .readFileSync(path.join(__dirname, "/db/init.sql"))
+        .toString();
+      const query = await this.connection.query(dataSql);
+    } catch {
+      console.log("Error happened while connecting");
+    }
   };
 
   getAllCarts = async () => {
@@ -42,7 +45,7 @@ export class DAO {
     try {
       const query = `SELECT * FROM shoppingCart.carts WHERE cartID = ${id}`; //match the id with database
       const [rows, fields] = await this.connection.execute(query); //wait until the result to get back then take the rows values for the cartsID and also save the row field
-      return rows as cart[];
+      return rows;
     } catch (error: any) {
       //catch any error that happens
       return error.sqlMessage;

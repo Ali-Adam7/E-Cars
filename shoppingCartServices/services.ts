@@ -4,7 +4,12 @@ import { DAO } from "./DAO";
 import { parse } from "dotenv";
 
 const dao = new DAO();
-dao.createConnection();
+
+try {
+  dao.createConnection();
+} catch {
+  console.log("Error happened while connecting to the DB");
+}
 
 export const getAllCarts: RequestHandler = async (req, res) => {
   try {
