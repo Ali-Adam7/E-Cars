@@ -16,10 +16,9 @@ app.use(json());
 app.get("/", getAllCarts); //admin
 app.get("/:id", getCartByID); //passing 1 paramater in the function
 
-// Middleware:
 app.put("/:cartId/:carId", addToCart); //add carID to the CartID we want. Also passing 2 paramtaers in the function
 
-app.delete("/:cartId", deleteCart); //deletes all the cars from the cart
+app.delete("/:cartId", deleteCart); //deletes all the cars from the cart as well as the cart
 
 app.delete("/:cartId/:carId", deleteFromCart); // delete specific car from the cart
 
