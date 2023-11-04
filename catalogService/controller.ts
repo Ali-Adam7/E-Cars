@@ -1,6 +1,6 @@
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import { addCar, deleteCar, editCar, getByFilters, getCarByID, getCars } from "./services";
+import { addCar, deleteCar, editCar, getCarByID, getCars } from "./services";
 //For env File
 dotenv.config();
 const app: Application = express();
