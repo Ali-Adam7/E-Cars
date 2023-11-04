@@ -9,7 +9,11 @@ export const getCars: RequestHandler = async (req, res) => {
       const cars = await dao.getAllCars();
       res.json(cars);
     } else {
-      const cars = await dao.getByFilter(req.query);
+      const filters = { ...req.query } as Partial<Car>;
+      if (filters.year) filters.year = parseInt(String(req.query.year));
+      if (filters.milage) filters.milage = parseInt(String(req.query.milage));
+      if (filters.price) filters.price = parseInt(String(req.query.price));
+      const cars = await dao.getByFilter(filters);
       res.json(cars);
     }
   } catch (error: any) {

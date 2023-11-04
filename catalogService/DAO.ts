@@ -27,7 +27,7 @@ export class DAO {
     }
   };
 
-  getByFilter = async (filters: any): Promise<Car[]> => {
+  getByFilter = async (filters: Partial<Car>): Promise<Car[]> => {
     try {
       const filteredCars = (await prisma.car.findMany({ where: filters })) as Car[];
       return filteredCars;
