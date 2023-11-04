@@ -11,13 +11,13 @@ datasource db {
 }
 
 model Car {
-  id      Int     @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   model   String
   make    String
   type    String
-  price   Decimal
+  price   Int
   img     String
   year    Int
   history String
-  milage  Decimal
+  milage  Int
 }
