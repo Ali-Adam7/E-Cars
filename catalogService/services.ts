@@ -65,3 +65,12 @@ export const deleteCar: RequestHandler = async (req, res) => {
     res.send(error);
   }
 };
+
+export const deleteAll: RequestHandler = async (req, res) => {
+  try {
+    const count = await dao.deleteAll();
+    res.json(count);
+  } catch (error: any) {
+    res.send(error);
+  }
+};

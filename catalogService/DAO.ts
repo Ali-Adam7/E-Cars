@@ -60,4 +60,13 @@ export class DAO {
       return error;
     }
   };
+
+  deleteAll = async (): Promise<number> => {
+    try {
+      const { count } = await prisma.car.deleteMany();
+      return count;
+    } catch (error: any) {
+      return error;
+    }
+  };
 }

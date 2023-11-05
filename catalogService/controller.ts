@@ -1,6 +1,6 @@
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import { addCar, deleteCar, editCar, getCarByID, getCars } from "./services";
+import { addCar, deleteAll, deleteCar, editCar, getCarByID, getCars } from "./services";
 //For env File
 dotenv.config();
 const app: Application = express();
@@ -15,8 +15,10 @@ app.get("/:id", getCarByID);
 app.post("/", addCar);
 app.put("/:id", editCar);
 
+app.delete("/", deleteAll);
 app.delete("/:id", deleteCar);
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);
 });
+module.exports = app;
