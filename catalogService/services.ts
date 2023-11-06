@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { DAO } from "./DAO";
-import { Car } from "@prisma/client";
+import { Car, Prisma, Reviews } from "@prisma/client";
+import { parse } from "path";
 
 const dao = new DAO();
 export const getCars: RequestHandler = async (req, res) => {
@@ -27,6 +28,19 @@ export const getCarByID: RequestHandler = async (req, res) => {
     const car = await dao.getByID(id);
     if (car) res.send(car);
     else res.send({});
+  } catch (error) {
+    res.send(error);
+  }
+};
+
+export const shopCar: RequestHandler = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const car = await dao.getByID(id);
+    if (car && car.quantity) {
+      const updated = await dao.shopCar(car);
+      res.send(updated);
+    } else res.send({});
   } catch (error) {
     res.send(error);
   }
@@ -60,6 +74,31 @@ export const deleteCar: RequestHandler = async (req, res) => {
       const id = parseInt(req.params.id?.toString());
       const deletedCar = await dao.deleteCar(id);
       res.send(deletedCar);
+    }
+  } catch (error: any) {
+    res.send(error);
+  }
+};
+
+export const getCarReviews: RequestHandler = async (req, res) => {
+  try {
+    if (req.params.id) {
+      const id = parseInt(req.params.id);
+      const reviews = await dao.getCarReviews(id);
+      res.send(reviews);
+    }
+  } catch (error: any) {
+    res.send(error);
+  }
+};
+
+export const postReview: RequestHandler = async (req, res) => {
+  try {
+    if (req.params.id) {
+      const review = req.body as Reviews;
+      const id = parseInt(req.params.id);
+      const postedReview = await dao.postReview({ ...review, carID: id });
+      res.send(postedReview);
     }
   } catch (error: any) {
     res.send(error);

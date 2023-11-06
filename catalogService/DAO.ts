@@ -2,7 +2,7 @@ const mysql = require("mysql2/promise");
 import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
-import { Car, PrismaClient } from "@prisma/client";
+import { Car, PrismaClient, Reviews } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { AnyARecord } from "dns";
 const prisma = new PrismaClient();
@@ -57,6 +57,29 @@ export class DAO {
       const deletedCar = await prisma.car.delete({ where: { id: id } });
       return deletedCar;
     } catch (error: any) {
+      return error;
+    }
+  };
+
+  shopCar = async (car: Car): Promise<Car> => {
+    try {
+      const updated = await prisma.car.update({ where: { id: car.id }, data: { ...car, quantity: car.quantity - 1 } });
+      return updated;
+    } catch (error: any) {
+      return error;
+    }
+  };
+  postReview = async (review: Reviews) => {
+    try {
+      const postedReview = await prisma.reviews.create({ data: { ...review } });
+      return postedReview;
+    } catch (error) {}
+  };
+  getCarReviews = async (id: number) => {
+    try {
+      const reviews = await prisma.reviews.findMany({ where: { carID: id } });
+      return reviews;
+    } catch (error) {
       return error;
     }
   };

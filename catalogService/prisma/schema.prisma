@@ -11,13 +11,24 @@ datasource db {
 }
 
 model Car {
-  id      Int    @id @default(autoincrement())
-  model   String
-  make    String
-  type    String
-  price   Int
-  img     String
-  year    Int
-  history String
-  milage  Int
+  id          Int       @id @default(autoincrement())
+  model       String
+  make        String
+  description String
+  type        String
+  price       Int
+  img         String
+  year        Int
+  history     String
+  milage      Int
+  quantity    Int
+  reviews     Reviews[]
+}
+
+model Reviews {
+  reviewID Int    @id @default(autoincrement())
+  review   String @unique
+  rating   Int
+  car      Car    @relation(fields: [carID], references: [id])
+  carID    Int
 }
