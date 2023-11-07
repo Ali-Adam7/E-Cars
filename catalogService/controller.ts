@@ -1,10 +1,17 @@
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
 import { addCar, deleteCar, editCar, getCarByID, getCarReviews, getCars, postReview, shopCar } from "./services";
+import fs from "fs";
 //For env File
 dotenv.config();
 const app: Application = express();
 const port = process.env.PORT || 8003;
+const https = require("https");
+const privateKey = fs.readFileSync("key.pem", "utf8");
+const certificate = fs.readFileSync("certificate.pem", "utf8");
+const credentials = { key: privateKey, cert: certificate };
+const helmet = require("helmet");
+var httpsServer = https.createServer(credentials, app);
 
 app.use(json());
 app.get("/", getCars);
@@ -20,6 +27,4 @@ app.put("/:id", editCar);
 
 app.delete("/:id", deleteCar);
 
-app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
-});
+httpsServer.listen(port);

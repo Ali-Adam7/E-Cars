@@ -1,17 +1,13 @@
-export interface car {
+export interface Car {
   id: number;
-  model: string;
-  make: string;
-  type: string;
+  model: String;
+  make: String;
+  description: String;
+  type: String;
   price: number;
-  img: string;
+  img: String;
   year: number;
-  history: string;
+  history: String;
   milage: number;
-}
-
-export interface cart {
-  cartId: number; // this is the cart ID to connect it with user ID after
-  carsIds: car[];
-  beforeTax: number;
+  quantity: number;
 }
