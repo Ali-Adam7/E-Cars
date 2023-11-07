@@ -9,9 +9,9 @@ const prisma = new PrismaClient();
 dotenv.config();
 
 export class DAO {
-  getAllCars = async (): Promise<Car[]> => {
+  getAllCars = async (sort: any): Promise<Car[]> => {
     try {
-      const allCars = (await prisma.car.findMany()) as Car[];
+      const allCars = (await prisma.car.findMany({ orderBy: [sort] })) as Car[];
       return allCars;
     } catch (error: any) {
       return error;
@@ -27,9 +27,9 @@ export class DAO {
     }
   };
 
-  getByFilter = async (filters: Partial<Car>): Promise<Car[]> => {
+  getByFilter = async (filters: Partial<Car>, sort: any): Promise<Car[]> => {
     try {
-      const filteredCars = (await prisma.car.findMany({ where: filters })) as Car[];
+      const filteredCars = (await prisma.car.findMany({ where: filters, orderBy: [sort] })) as Car[];
       return filteredCars;
     } catch (error: any) {
       return error;

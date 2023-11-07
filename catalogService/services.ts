@@ -6,15 +6,19 @@ import { parse } from "path";
 const dao = new DAO();
 export const getCars: RequestHandler = async (req, res) => {
   try {
+    const sort: any = {};
+    sort[Object.keys(req.body)[0]] = req.body[Object.keys(req.body)[0]];
+
     if (!Object.keys(req.query).length) {
-      const cars = await dao.getAllCars();
+      const cars = await dao.getAllCars(sort);
       res.json(cars);
     } else {
       const filters = { ...req.query } as Partial<Car>;
       if (filters.year) filters.year = parseInt(String(req.query.year));
       if (filters.milage) filters.milage = parseInt(String(req.query.milage));
       if (filters.price) filters.price = parseInt(String(req.query.price));
-      const cars = await dao.getByFilter(filters);
+
+      const cars = await dao.getByFilter(filters, sort);
       res.json(cars);
     }
   } catch (error: any) {
