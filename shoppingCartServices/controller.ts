@@ -11,7 +11,7 @@ const helmet = require("helmet");
 
 dotenv.config();
 const app: Application = express();
-const port = process.env.PORT || 8003;
+const port = process.env.PORT || 8004;
 var httpsServer = https.createServer(credentials, app);
 
 app.use(json());

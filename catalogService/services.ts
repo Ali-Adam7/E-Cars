@@ -6,19 +6,19 @@ import { parse } from "path";
 const dao = new DAO();
 export const getCars: RequestHandler = async (req, res) => {
   try {
-    const sort: any = {};
-    sort[Object.keys(req.body)[0]] = req.body[Object.keys(req.body)[0]];
-
     if (!Object.keys(req.query).length) {
-      const cars = await dao.getAllCars(sort);
+      const cars = await dao.getAllCars();
       res.json(cars);
     } else {
-      const filters = { ...req.query } as Partial<Car>;
-      if (filters.year) filters.year = parseInt(String(req.query.year));
-      if (filters.milage) filters.milage = parseInt(String(req.query.milage));
-      if (filters.price) filters.price = parseInt(String(req.query.price));
-
-      const cars = await dao.getByFilter(filters, sort);
+      const queryFilters = { ...req.query } as Partial<Car>;
+      if (queryFilters.year) queryFilters.year = parseInt(String(req.query.year));
+      if (queryFilters.milage) queryFilters.milage = parseInt(String(req.query.milage));
+      if (queryFilters.price) queryFilters.price = parseInt(String(req.query.price));
+      const makeFilter = queryFilters.make?.split(",") as string[];
+      const typeFilter = queryFilters.type?.split(",") as string[];
+      const history = Boolean(parseInt(String(queryFilters.history)));
+      const filter = { ...queryFilters, make: { in: makeFilter }, type: { in: typeFilter }, history: history };
+      const cars = await dao.getByFilter(filter);
       res.json(cars);
     }
   } catch (error: any) {
@@ -31,7 +31,7 @@ export const getCarByID: RequestHandler = async (req, res) => {
     const id = parseInt(req.params.id);
     const car = await dao.getByID(id);
     if (car) res.send(car);
-    else res.send({});
+    else res.status(404).send({});
   } catch (error) {
     res.send(error);
   }
@@ -105,6 +105,25 @@ export const postReview: RequestHandler = async (req, res) => {
       res.send(postedReview);
     }
   } catch (error: any) {
+    res.send(error);
+  }
+};
+export const getMakes: RequestHandler = async (req, res) => {
+  try {
+    const result = (await dao.getMakes()) as [];
+    const makes = result.map((res: { make: string }) => {
+      return res.make;
+    });
+    res.send(makes);
+  } catch (error) {
+    res.send(error);
+  }
+};
+export const getDeals: RequestHandler = async (req, res) => {
+  try {
+    const result = (await dao.getDeals()) as Car[];
+    res.send(result);
+  } catch (error) {
     res.send(error);
   }
 };

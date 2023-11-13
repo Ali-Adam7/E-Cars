@@ -19,10 +19,11 @@ model Car {
   price       Int
   img         String
   year        Int
-  history     String
+  history     Boolean
   milage      Int
   quantity    Int
   reviews     Reviews[]
+  deal        Boolean
 }
 
 model Reviews {

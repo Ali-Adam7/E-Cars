@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Cart {
-  id    Int
-  carID Int
+  id       Int
+  carID    Int
+  quantity Int
 
   @@id([id, carID])
 }
