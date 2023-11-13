@@ -21,28 +21,32 @@ export const registerUser: RequestHandler = async (req, res) => {
   try {
     const user = { ...req.body, createdAt: new Date(), password: await bcrypt.hash(req.body.password, saltRounds) };
     const createdUser = await dao.registerUser(user);
-    delete createdUser.password;
-    const token = jwt.sign(createdUser, privateKey, { algorithm: "RS256" });
 
+    delete createdUser.password;
+    const token = await jwt.sign(createdUser, privateKey, { algorithm: "RS256" });
     res.send({ ...createdUser, token: token });
   } catch (error: any) {
-    res.send(error);
+    res.status(401).send("error registering user");
   }
 };
 
 export const authenticateUser: RequestHandler = async (req, res) => {
   try {
-    const dbUser = (await dao.getUserByEmail(req.body.email)) as User;
+    const dbUser = await dao.getUserByEmail(req.body.email);
+
     if (dbUser) {
       const validation = await bcrypt.compare(req.body.password, dbUser.password);
       if (validation) {
         const token = jwt.sign(dbUser, privateKey, { algorithm: "RS256" });
-        res.json({ token: token });
+        delete dbUser.password;
+        res.status(200).json({ ...dbUser, token: token });
       } else {
-        res.send("Wrong password or email address");
+        res.status(404).send("Wrong password or email address");
       }
+    } else {
+      res.status(404).send("Wrong password or email address");
     }
   } catch (error: any) {
-    res.send(error);
+    res.status(500).send(error);
   }
 };

@@ -1,6 +1,17 @@
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
-import { addCar, deleteCar, editCar, getCarByID, getCarReviews, getCars, postReview, shopCar } from "./services";
+import {
+  addCar,
+  deleteCar,
+  editCar,
+  getCarByID,
+  getCarReviews,
+  getCars,
+  getDeals,
+  getMakes,
+  postReview,
+  shopCar,
+} from "./services";
 import fs from "fs";
 //For env File
 dotenv.config();
@@ -15,11 +26,14 @@ var httpsServer = https.createServer(credentials, app);
 
 app.use(json());
 app.get("/", getCars);
+
 app.get("/:id", getCarByID);
 app.get("/review/:id", getCarReviews);
+app.get("/makes/all", getMakes);
 
 app.put("/order/:id", shopCar);
 app.post("/review/:id", postReview);
+app.get("/deals/all", getDeals);
 
 // Needs Token:
 app.post("/", addCar);
