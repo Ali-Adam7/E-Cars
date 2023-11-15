@@ -1,8 +1,10 @@
 import { RequestHandler } from "express";
 import { DAO } from "./DAO";
 import { Car, Prisma, Reviews } from "@prisma/client";
-import { parse } from "path";
 
+const isValidationError = (error: any) => {
+  return String(error).includes("PrismaClientValidationError");
+};
 const dao = new DAO();
 export const getCars: RequestHandler = async (req, res) => {
   try {
@@ -19,10 +21,11 @@ export const getCars: RequestHandler = async (req, res) => {
       const history = Boolean(parseInt(String(queryFilters.history)));
       const filter = { ...queryFilters, make: { in: makeFilter }, type: { in: typeFilter }, history: history };
       const cars = await dao.getByFilter(filter);
-      res.json(cars);
+      res.status(200).json(cars);
     }
   } catch (error: any) {
-    res.send(error);
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 
@@ -30,10 +33,12 @@ export const getCarByID: RequestHandler = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const car = await dao.getByID(id);
-    if (car) res.send(car);
+
+    if (car) res.status(200).send(car);
     else res.status(404).send({});
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
@@ -46,18 +51,19 @@ export const shopCar: RequestHandler = async (req, res) => {
       res.send(updated);
     } else res.send({});
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 
 export const addCar: RequestHandler = async (req, res) => {
   const car: Car = req.body;
-
   try {
     const addedCar = await dao.addCar(car);
-    res.send(addedCar);
+    res.status(200).send(addedCar);
   } catch (error: any) {
-    res.send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
@@ -66,9 +72,10 @@ export const editCar: RequestHandler = async (req, res) => {
     const car: Car = req.body;
     const id = parseInt(req.params.id);
     const editedCar = await dao.editCar(car, id);
-    res.send(editedCar);
+    res.status(202).send(editedCar);
   } catch (error: any) {
-    res.send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
@@ -77,10 +84,11 @@ export const deleteCar: RequestHandler = async (req, res) => {
     if (req.params.id) {
       const id = parseInt(req.params.id?.toString());
       const deletedCar = await dao.deleteCar(id);
-      res.send(deletedCar);
+      res.status(202).send(deletedCar);
     }
   } catch (error: any) {
-    res.send(error);
+    if (String(error).includes("Record to delete does not exist.")) res.sendStatus(400);
+    else res.sendStatus(500);
   }
 };
 
@@ -89,23 +97,26 @@ export const getCarReviews: RequestHandler = async (req, res) => {
     if (req.params.id) {
       const id = parseInt(req.params.id);
       const reviews = await dao.getCarReviews(id);
-      res.send(reviews);
+      res.status(200).send(reviews);
     }
   } catch (error: any) {
-    res.send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
 export const postReview: RequestHandler = async (req, res) => {
   try {
     if (req.params.id) {
-      const review = req.body as Reviews;
+      const review = await req.body;
+      console.log(review);
       const id = parseInt(req.params.id);
       const postedReview = await dao.postReview({ ...review, carID: id });
-      res.send(postedReview);
+      res.status(201).send(postedReview);
     }
   } catch (error: any) {
-    res.send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 export const getMakes: RequestHandler = async (req, res) => {
@@ -114,16 +125,32 @@ export const getMakes: RequestHandler = async (req, res) => {
     const makes = result.map((res: { make: string }) => {
       return res.make;
     });
-    res.send(makes);
+    res.status(200).send(makes);
   } catch (error) {
-    res.send(error);
+    console.log(error);
+
+    res.sendStatus(500);
   }
 };
 export const getDeals: RequestHandler = async (req, res) => {
   try {
     const result = (await dao.getDeals()) as Car[];
-    res.send(result);
+    res.status(200).send(result);
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+export const loanCalcualtor: RequestHandler = async (req, res) => {
+  try {
+    const { price, downPayment, interest, period } = req.body;
+    const result =
+      (price - downPayment) *
+      (((interest / 12) * Math.pow(1 + interest / 12, period)) / (Math.pow(1 + interest / 12, period) - 1));
+    res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
   }
 };

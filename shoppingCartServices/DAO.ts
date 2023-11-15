@@ -11,7 +11,7 @@ export class DAO {
       const allCarts = (await prisma.cart.findMany()) as Cart[];
       return allCarts;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -20,7 +20,7 @@ export class DAO {
       const cart = await prisma.cart.findMany({ where: { id: id } });
       return cart;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -37,7 +37,7 @@ export class DAO {
       const cart = await prisma.cart.create({ data: { id: cartID, carID: carID, quantity: 1 } });
       return cart.quantity;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -47,7 +47,7 @@ export class DAO {
 
       return cart.count;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   }
 
@@ -64,15 +64,15 @@ export class DAO {
       const cart = await prisma.cart.deleteMany({ where: { id: cartID, carID: carID } });
       return cart.count;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   }
   async getCarQuantity(cartID: number, carID: number): Promise<number | null> {
     try {
-      const previusQuantity = (await prisma.cart.findMany({ where: { id: cartID, carID: carID } }))[0].quantity;
+      const previusQuantity = (await prisma.cart.findMany({ where: { id: cartID, carID: carID } }))[0]?.quantity;
       return previusQuantity;
     } catch (error) {
-      return null;
+      throw error;
     }
   }
 }

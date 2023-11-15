@@ -8,9 +8,10 @@ CREATE TABLE `Car` (
     `price` INTEGER NOT NULL,
     `img` VARCHAR(191) NOT NULL,
     `year` INTEGER NOT NULL,
-    `history` VARCHAR(191) NOT NULL,
+    `history` BOOLEAN NOT NULL,
     `milage` INTEGER NOT NULL,
     `quantity` INTEGER NOT NULL,
+    `deal` BOOLEAN NOT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -21,6 +22,8 @@ CREATE TABLE `Reviews` (
     `review` VARCHAR(191) NOT NULL,
     `rating` INTEGER NOT NULL,
     `carID` INTEGER NOT NULL,
+    `userID` INTEGER NOT NULL,
+    `time` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `Reviews_review_key`(`review`),
     PRIMARY KEY (`reviewID`)

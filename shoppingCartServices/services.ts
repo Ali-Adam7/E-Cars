@@ -2,13 +2,16 @@ import { RequestHandler } from "express";
 import { DAO } from "./DAO";
 
 const dao = new DAO();
-
+const isValidationError = (error: any) => {
+  return String(error).includes("PrismaClientValidationError");
+};
 export const getAllCarts: RequestHandler = async (req, res) => {
   try {
     const carts = await dao.getAllCarts();
-    res.json(carts);
+    res.status(200).json(carts);
   } catch (error) {
-    res.sendStatus(500).send(error);
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 export const getCartByID: RequestHandler = async (req, res) => {
@@ -18,9 +21,10 @@ export const getCartByID: RequestHandler = async (req, res) => {
     const cart = result.map((recrod: any) => {
       return { carID: recrod.carID, quantity: recrod.quantity };
     });
-    res.json(cart);
+    res.status(200).json(cart);
   } catch (error) {
-    res.sendStatus(500).send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
@@ -30,7 +34,8 @@ export const addToCart: RequestHandler = async (req, res) => {
     const cart = await dao.addCart(parseInt(cartID), parseInt(carID));
     res.sendStatus(201).send(cart);
   } catch (error) {
-    res.sendStatus(500).send(error);
+    console.log(error);
+    res.sendStatus(500);
   }
 };
 
@@ -38,9 +43,11 @@ export const deleteCart: RequestHandler = async (req, res) => {
   try {
     const cartID = parseInt(req.params.cartID); //need id to match it with cartsID
     const result = await dao.deleteCart(cartID); //pass the cartId as parm
-    res.sendStatus(202).send(result);
+    if (result) res.sendStatus(202);
+    else res.sendStatus(404);
   } catch (error) {
-    res.sendStatus(204).send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
 
@@ -49,8 +56,10 @@ export const deleteFromCart: RequestHandler = async (req, res) => {
   try {
     const { cartID, carID } = req.params; //holds both parameters cartId and carI
     const cart = await dao.deleteFromCart(parseInt(cartID), parseInt(carID));
-    res.sendStatus(202).send(cart);
+    if (cart) res.sendStatus(202);
+    else res.sendStatus(204);
   } catch (error) {
-    res.sendStatus(204).send(error);
+    console.log(error);
+    isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };

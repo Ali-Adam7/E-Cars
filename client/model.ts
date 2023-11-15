@@ -21,10 +21,12 @@ interface User {
   address: String;
 }
 interface Review {
-  reviewID: number;
+  reviewID?: number;
   review: String;
   rating: number;
   carID: number;
+  firstName: number;
+  time: Date;
 }
 interface Cart {
   cars: Car[];

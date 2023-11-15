@@ -1,12 +1,3 @@
-export async function GET(request: Request) {
-  const endPoint = request.headers.get("endPoint");
-  try {
-  } catch (error) {
-    return Response.json(error);
-  }
-  return Response.json("Hello");
-}
-
 export async function POST(request: Request) {
   const endPoint = request.headers.get("endPoint");
 
@@ -22,16 +13,8 @@ export async function POST(request: Request) {
         },
       });
       if (res.status != 201) {
-        return Response.json(
-          {
-            message: "Error creating user",
-          },
-          {
-            status: 401,
-          }
-        );
+        return Response.json({ message: "Error creating user" }, { status: res.status });
       }
-
       const user = await JSON.parse(await res.text());
       return Response.json(user);
     } else if (endPoint === "SignIn") {
@@ -44,15 +27,8 @@ export async function POST(request: Request) {
           rejectUnauthorized: "false",
         },
       });
-      if (res.status === 404) {
-        return Response.json(
-          {
-            message: "Wrong Email or Password",
-          },
-          {
-            status: 404,
-          }
-        );
+      if (res.status != 202) {
+        return Response.json({ message: "Wrong Email or Password" }, { status: res.status });
       }
       const user = await JSON.parse(await res.text());
       return Response.json(user);

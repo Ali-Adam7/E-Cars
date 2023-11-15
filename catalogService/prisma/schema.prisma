@@ -27,9 +27,11 @@ model Car {
 }
 
 model Reviews {
-  reviewID Int    @id @default(autoincrement())
-  review   String @unique
+  reviewID Int      @id @default(autoincrement())
+  review   String   @unique
   rating   Int
-  car      Car    @relation(fields: [carID], references: [id])
+  car      Car      @relation(fields: [carID], references: [id])
   carID    Int
+  userID   Int
+  time     DateTime
 }

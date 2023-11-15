@@ -1,44 +1,28 @@
-"use client";
+"use server";
 import { addToCart } from "@/store/cartSlice";
 import store, { RootState } from "@/store/store";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ReviewsClient from "./ReviewsClient";
+import CarClient from "./CarClient";
 
-export default function Page({ params }: { params: { slug: string } }) {
-  const router = useRouter();
+export default async function Page({ params }: { params: { slug: string } }) {
   const id = params.slug;
-  const [car, setCar] = useState<Car>();
-  const [reviews, setReviews] = useState<Review[]>();
-  const user = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    const getInfo = async () => {
-      const carRes = await fetch(`/api/car`, { method: "GET", headers: { endPoint: "ID", id: id }, cache: "no-store" });
-      if (carRes.status === 404) {
-        router.replace("/");
-      }
+  const carRes = await fetch(`https://localhost:3000/api/car`, {
+    method: "GET",
+    headers: { endPoint: "ID", id: id },
+    cache: "no-store",
+  });
+  if (carRes.status != 200) {
+    redirect("/cars");
+  }
 
-      const car = (await carRes.json()) as Car;
-      const reviews: Review[] = await (
-        await fetch(`/api/car`, { headers: { endPoint: "Reviews", id: id }, cache: "no-store" })
-      ).json();
-      setCar(car);
-      setReviews(reviews);
-    };
-    getInfo();
-  }, []);
-
-  const add = async (car: Car) => {
-    if (user.id) {
-      const carRes = await fetch(`/api/cart`, {
-        method: "POST",
-        headers: { endPoint: "addToCart", cartID: String(user.id), carID: String(car.id) },
-        cache: "no-store",
-      });
-    }
-    store.dispatch(addToCart({ ...car, quantity: 1 }));
-  };
+  const car = (await carRes.json()) as Car;
+  const reviews: Review[] = await (
+    await fetch(`https://localhost:3000/api/car`, { headers: { endPoint: "Reviews", id: id }, cache: "no-store" })
+  ).json();
 
   const features = [
     { name: "Make", description: `${car?.make}` },
@@ -71,39 +55,69 @@ export default function Page({ params }: { params: { slug: string } }) {
         <div>
           <img src={car?.img} alt="" className="rounded-xl bg-gray-100 xl:ml-20" />
         </div>
-        <div className="justify-self-center  lg:justify-self-start	 ">
-          <button
-            className="flex 	 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            onClick={async () => {
-              if (car) await add(car);
-            }}
-          >
-            Add to Cart
-          </button>
-        </div>
+        <CarClient car={car} />
       </div>
 
       <div className="bg-white ">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Reviews</h2>
+            <div className="grid grid-cols-4 ">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl ">Reviews</h2>
+            </div>
+
             <p className="mt-2 text-lg leading-8 text-gray-600">See what customers say about this car</p>
           </div>
 
-          <div className="mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {reviews?.map((review: Review) => (
-              <article key={review.reviewID} className="flex max-w-xl flex-col items-start justify-between">
-                <div className="group relative">
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                    <div>
-                      <span className="absolute inset-0" />
-                      {review.rating}/5
-                    </div>
-                  </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{review.review}</p>
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8   sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-1">
+            <ReviewsClient car={car} />
+
+            <div className="bg-white mb-10">
+              <div className="mx-auto max-w-7xl ">
+                <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-5 sm:pt-15 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                  {reviews?.map((post: Review) => {
+                    const stars = new Array(post.rating).fill(1);
+                    return (
+                      <article key={post.reviewID} className="flex max-w-xl flex-col items-start justify-between">
+                        <div className="relative mt-8 flex items-center gap-x-4">
+                          <img
+                            src={
+                              "https://t4.ftcdn.net/jpg/03/59/58/91/360_F_359589186_JDLl8dIWoBNf1iqEkHxhUeeOulx0wOC5.jpg"
+                            }
+                            alt=""
+                            className="h-10 w-10 rounded-full bg-gray-50"
+                          />
+                          <div className="text-sm leading-6">
+                            <p className="font-semibold text-gray-900">
+                              <div className="group relative ">
+                                <div className="rating">
+                                  {stars.map((star, i) => {
+                                    return (
+                                      <input
+                                        key={i}
+                                        type="radio"
+                                        name="rating-2"
+                                        className="mask mask-star-2 bg-orange-400"
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                              <span className="absolute inset-0" />
+                              {post.firstName}
+                            </p>
+                            <div className="flex items-start text-xs">
+                              <div className="relative z-10  rounded-xl bg-gray-100  px-1 py-1.5  font-medium text-black ">
+                                {post.review}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
                 </div>
-              </article>
-            ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

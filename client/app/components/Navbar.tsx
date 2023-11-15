@@ -62,6 +62,11 @@ export default function Navbar() {
               <a href="/cars/hotdeals" className="text-sm font-medium text-gray-700 hover:text-gray-800">
                 Deals
               </a>
+              <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
+
+              <a href="/calculator" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                Loan Calculator
+              </a>
             </div>
           </div>
 
