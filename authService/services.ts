@@ -21,10 +21,15 @@ export const validatePassword = (password: string, hash: string) => {
 
 export const registerUser: RequestHandler = async (req, res) => {
   try {
-    const user = { ...req.body, createdAt: new Date(), password: await bcrypt.hash(req.body.password, saltRounds) };
+    const user = {
+      ...req.body,
+      createdAt: new Date(),
+      password: await bcrypt.hash(String(req.body.password), saltRounds),
+    };
+
     const createdUser = await dao.registerUser(user);
-    createdUser.password = "";
     const token = await jwt.sign(createdUser, privateKey, { algorithm: "RS256" });
+    createdUser.password = "";
     res.status(201).send({ ...createdUser, token: token, role: "user" });
   } catch (error: any) {
     console.log(error);

@@ -24,17 +24,20 @@ export async function GET(request: Request) {
       return Response.json(makes);
     } else if (endPoint === "ID") {
       const id = request.headers.get("id");
+
       const res = await fetch(`https://localhost:8003/${id}`, {
         method: "GET",
         headers: {
           rejectUnauthorized: "false",
         },
+        cache: "no-store",
       });
 
       if (res.status !== 200) {
         return Response.json({ message: "Not Found" }, { status: res.status });
       }
       const car = (await res.json()) as Car;
+
       await fetch("https://localhost:8005/", {
         method: "POST",
         body: JSON.stringify({ time: new Date(), carID: id, eventType: "View" }),
@@ -44,6 +47,7 @@ export async function GET(request: Request) {
         },
         cache: "no-store",
       });
+
       return Response.json(car);
     } else if (endPoint === "Reviews") {
       const id = request.headers.get("id");
@@ -94,7 +98,6 @@ export async function POST(request: Request) {
           rejectUnauthorized: "false",
         },
       });
-      console.log(res.status);
       if (res.status == 201) {
         return Response.json(await res.json());
       }

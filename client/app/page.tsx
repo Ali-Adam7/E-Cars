@@ -1,6 +1,6 @@
 import Categories from "./components/Categories";
-import All from "./components/All";
-import Front from "./components/Front";
+import All from "./components/CarPictures";
+import Front from "./components/Landing";
 
 export default async function Main() {
   // initilize cart

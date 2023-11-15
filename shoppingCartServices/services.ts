@@ -8,7 +8,7 @@ const isValidationError = (error: any) => {
 export const getAllCarts: RequestHandler = async (req, res) => {
   try {
     const carts = await dao.getAllCarts();
-    res.status(200).json(carts);
+    res.json(carts);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
@@ -21,7 +21,7 @@ export const getCartByID: RequestHandler = async (req, res) => {
     const cart = result.map((recrod: any) => {
       return { carID: recrod.carID, quantity: recrod.quantity };
     });
-    res.status(200).json(cart);
+    res.json(cart);
   } catch (error) {
     console.log(error);
     isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);

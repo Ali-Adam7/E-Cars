@@ -33,8 +33,7 @@ export const getCarByID: RequestHandler = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
     const car = await dao.getByID(id);
-
-    if (car) res.status(200).send(car);
+    if (car) res.json(car);
     else res.status(404).send({});
   } catch (error) {
     console.log(error);
@@ -109,7 +108,6 @@ export const postReview: RequestHandler = async (req, res) => {
   try {
     if (req.params.id) {
       const review = await req.body;
-      console.log(review);
       const id = parseInt(req.params.id);
       const postedReview = await dao.postReview({ ...review, carID: id });
       res.status(201).send(postedReview);
