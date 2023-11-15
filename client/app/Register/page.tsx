@@ -15,7 +15,7 @@ export default function Example() {
   const reg = async () => {
     try {
       if (password && email && firstName && lastName && address) {
-        const res = await fetch("/api", {
+        const res = await fetch("/api/user", {
           method: "POST",
           body: JSON.stringify({
             email: email,
@@ -23,6 +23,7 @@ export default function Example() {
             firstName: firstName,
             lastName: lastName,
             address: address,
+            role: "user",
           }),
           headers: {
             "Content-Type": "application/json",
@@ -30,6 +31,7 @@ export default function Example() {
             endPoint: "Register",
             cache: "no-store",
           },
+          cache: "no-store",
         });
         const user = (await res.json()) as User;
         if (user.token) {

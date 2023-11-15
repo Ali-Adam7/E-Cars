@@ -18,4 +18,5 @@ model User {
   firstName String   @db.VarChar(255)
   lastName  String
   address   String
+  role      String
 }

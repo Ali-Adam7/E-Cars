@@ -9,6 +9,7 @@ import {
   getCars,
   getDeals,
   getMakes,
+  loanCalcualtor,
   postReview,
   shopCar,
 } from "./services";
@@ -26,13 +27,13 @@ var httpsServer = https.createServer(credentials, app);
 
 app.use(json());
 app.get("/", getCars);
-
 app.get("/:id", getCarByID);
 app.get("/review/:id", getCarReviews);
 app.get("/makes/all", getMakes);
 
 app.put("/order/:id", shopCar);
 app.post("/review/:id", postReview);
+app.post("/loan/calculator", loanCalcualtor);
 app.get("/deals/all", getDeals);
 
 // Needs Token:

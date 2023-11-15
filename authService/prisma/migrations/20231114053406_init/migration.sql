@@ -7,6 +7,8 @@ CREATE TABLE `User` (
     `firstName` VARCHAR(255) NOT NULL,
     `lastName` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
+    `role` VARCHAR(191) NOT NULL,
+    `img` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `User_email_key`(`email`),
     PRIMARY KEY (`id`)

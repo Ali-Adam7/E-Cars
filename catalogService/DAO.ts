@@ -14,7 +14,7 @@ export class DAO {
       const allCars = (await prisma.car.findMany()) as Car[];
       return allCars;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -23,7 +23,7 @@ export class DAO {
       const car = (await prisma.car.findUnique({ where: { id: id } })) as Car;
       return car;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -34,7 +34,7 @@ export class DAO {
       })) as Car[];
       return filteredCars;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -43,7 +43,7 @@ export class DAO {
       const newCar = prisma.car.create({ data: car });
       return newCar;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
   editCar = async (car: Car, id: number): Promise<Car> => {
@@ -51,7 +51,7 @@ export class DAO {
       const editedCar = await prisma.car.update({ where: { id: id }, data: { ...car } });
       return editedCar;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
   deleteCar = async (id: number): Promise<Car> => {
@@ -59,7 +59,7 @@ export class DAO {
       const deletedCar = await prisma.car.delete({ where: { id: id } });
       return deletedCar;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
 
@@ -68,21 +68,23 @@ export class DAO {
       const updated = await prisma.car.update({ where: { id: car.id }, data: { ...car, quantity: car.quantity - 1 } });
       return updated;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
   postReview = async (review: Reviews) => {
     try {
       const postedReview = await prisma.reviews.create({ data: { ...review } });
       return postedReview;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   };
   getCarReviews = async (id: number) => {
     try {
       const reviews = await prisma.reviews.findMany({ where: { carID: id } });
       return reviews;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
   getMakes = async () => {
@@ -93,7 +95,7 @@ export class DAO {
       });
       return makes;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
   getDeals = async () => {
@@ -101,7 +103,7 @@ export class DAO {
       const carsOnSale = await prisma.car.findMany({ where: { deal: true } });
       return carsOnSale;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 }

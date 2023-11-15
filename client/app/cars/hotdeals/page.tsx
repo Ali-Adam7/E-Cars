@@ -1,7 +1,7 @@
 "use server";
 export default async function deals() {
   const carsOnSale = (await (
-    await fetch("https://localhost:8003/deals/all", { headers: { rejectUnauthorized: "false" } })
+    await fetch("https://localhost:8003/deals/all", { headers: { rejectUnauthorized: "false" }, cache: "no-store" })
   ).json()) as Car[];
 
   return (

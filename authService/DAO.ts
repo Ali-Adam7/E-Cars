@@ -12,7 +12,7 @@ export class DAO {
       const createdUser = await prisma.user.create({ data: user });
       return createdUser;
     } catch (error: any) {
-      return error;
+      throw error;
     }
   };
   getUserByEmail = async (email: string) => {
@@ -20,7 +20,16 @@ export class DAO {
       const user = await prisma.user.findUnique({ where: { email: email } });
       return user;
     } catch (error: any) {
-      return error;
+      throw error;
+    }
+  };
+
+  getUserByID = async (id: number) => {
+    try {
+      const user = await prisma.user.findUnique({ where: { id: id }, select: { firstName: true } });
+      return user;
+    } catch (error: any) {
+      throw error;
     }
   };
 }
