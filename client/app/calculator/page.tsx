@@ -94,12 +94,11 @@ export default function Example() {
           <button
             type="submit"
             onClick={() => {
-              if (loan && payment && interest && period) {
+              if (loan && downPayment && interest && period) {
                 const result =
                   (loan - downPayment) *
                   (((interest / 12) * Math.pow(1 + interest / 12, period)) / (Math.pow(1 + interest / 12, period) - 1));
                 setPayment(Math.ceil(result));
-
                 setOpen(true);
               }
             }}
