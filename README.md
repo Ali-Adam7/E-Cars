@@ -1,20 +1,18 @@
 # E-Cars
- Building E-Commerce Systems Project
+ Building E-Commerce Systems Project <br>
+How to run the project:
+- For each Microservice folder:
+ cd into the folder: `cd <serviceName>`
+1) Install dependencies:<br>
+   `npm install`
+2) Initialize Prisma ORM:<br>
+   `npx prisma migrate dev --name init`
+3) Generate Prisma Client:<br>
+   `npx prisma generate`
+4) Run the microservice:<br>
+  For Development:
+  `npm run dev`
 
-How to run a microservice:
-
--For Development: <br>
- `npm run dev`
-
--For a Production build:
-`npm run build` <br>
-`npm run start` <br>
-
-
-ORM Set up: <br>
-`npm install @prisma/client` <br>
-Sync database: <br>
-`npx prisma migrate dev` <br>
-Generate Prisma client: <br>
-`npx prisma generate` <br>
+  For a Production Build:
+  `npm run build` then `npm run start`
 
