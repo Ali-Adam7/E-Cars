@@ -25,8 +25,11 @@ const cartrSlice = createSlice({
       } else {
         state.splice(index, 1);
       }
+      if (state.length == 0) {
+        state = initial;
+      }
     },
-    emptyCart: (state) => (state = []),
+    emptyCart: (state) => (state = initial),
   },
 });
 export const { initialize, addToCart, removeFromCart, emptyCart } = cartrSlice.actions;

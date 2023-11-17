@@ -9,6 +9,7 @@ import {
   getCars,
   getDeals,
   getMakes,
+  getRecommendation,
   loanCalcualtor,
   postReview,
   shopCar,
@@ -30,6 +31,7 @@ app.get("/", getCars);
 app.get("/:id", getCarByID);
 app.get("/review/:id", getCarReviews);
 app.get("/makes/all", getMakes);
+app.get("/car/recommender", getRecommendation);
 
 app.put("/order/:id", shopCar);
 app.post("/review/:id", postReview);
@@ -40,6 +42,7 @@ app.get("/deals/all", getDeals);
 app.post("/", addCar);
 app.put("/:id", editCar);
 
+app.put("/car/shop", shopCar);
 app.delete("/:id", deleteCar);
 
 httpsServer.listen(port);

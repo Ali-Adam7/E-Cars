@@ -9,21 +9,13 @@ export async function GET(request: Request) {
           rejectUnauthorized: "false",
         },
       });
-      const cart = await res.json();
-      const cars: any[] = [];
-      for (let i = 0; i < cart.length; i++) {
-        const res = await fetch(`https://localhost:8003/${cart[i].carID}`, {
-          method: "GET",
-          headers: {
-            rejectUnauthorized: "false",
-          },
+      if (res.status != 200) {
+        return Response.json({
+          status: 404,
         });
-        const car = await res.json();
-        car.quantity = cart[i].quantity;
-        cars.push(car);
       }
-
-      return Response.json(cars);
+      const cart = await res.json();
+      return Response.json(cart);
     }
   } catch (error) {
     return Response.json(error);

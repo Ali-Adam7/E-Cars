@@ -63,9 +63,12 @@ export class DAO {
     }
   };
 
-  shopCar = async (car: Car): Promise<Car> => {
+  shopCar = async (car: Car, quantity: number): Promise<Car> => {
     try {
-      const updated = await prisma.car.update({ where: { id: car.id }, data: { ...car, quantity: car.quantity - 1 } });
+      const updated = await prisma.car.update({
+        where: { id: car.id },
+        data: { ...car, quantity: car.quantity - quantity },
+      });
       return updated;
     } catch (error: any) {
       throw error;

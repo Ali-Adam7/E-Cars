@@ -47,8 +47,15 @@ export const authenticateUser: RequestHandler = async (req, res) => {
         const token = jwt.sign(dbUser, privateKey, { algorithm: "RS256" });
         dbUser.password = "";
         res.status(202).json({ ...dbUser, token: token });
-      } else res.sendStatus(404);
-    } else res.sendStatus(404);
+        return;
+      }
+
+      res.sendStatus(404);
+      return;
+    }
+
+    res.sendStatus(404);
+    return;
   } catch (error: any) {
     console.log(error);
     isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
@@ -60,7 +67,10 @@ export const getUserByID: RequestHandler = async (req, res) => {
     const user = await dao.getUserByID(id);
     if (user) {
       res.status(200).json(user);
-    } else res.sendStatus(404);
+      return;
+    }
+    res.sendStatus(404);
+    return;
   } catch (error: any) {
     console.log(error);
     res.sendStatus(500);
