@@ -9,20 +9,22 @@ import { initialize, removeFromCart } from "@/store/cartSlice";
 export default function Navbar() {
   const user = useSelector((state: RootState) => state.user);
   const cart = useSelector((state: RootState) => state.cart);
-
-  const getCart = useCallback(async () => {
+  console.log("cart ");
+  console.log(cart);
+  const getCart = async () => {
     if (user.id) {
       const res = await fetch("/api/cart", {
         cache: "no-store",
         headers: { endPoint: "getCart", id: String(user.id) },
       });
-      if (res.status === 404) {
-        return;
+      const response = await res.json();
+      if (response.status == 404) {
+        store.dispatch(initialize([]));
+      } else {
+        store.dispatch(initialize(response));
       }
-      const cars: Car[] = await res.json();
-      store.dispatch(initialize(cars));
     }
-  }, []);
+  };
   // get items from DB:
   useEffect(() => {
     getCart();
