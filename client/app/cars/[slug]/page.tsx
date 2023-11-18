@@ -1,9 +1,5 @@
 "use server";
-import { addToCart } from "@/store/cartSlice";
-import store, { RootState } from "@/store/store";
-import { redirect, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { redirect } from "next/navigation";
 import ReviewsClient from "./ReviewsClient";
 import CarClient from "./CarClient";
 

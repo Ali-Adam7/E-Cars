@@ -50,7 +50,6 @@ function classNames(...classes: string[]) {
 }
 
 export default function Example() {
-  const router = useRouter();
   const [make] = useState(new Set());
   const [type] = useState(new Set());
   const [accident, setAccident] = useState<number>(0);
@@ -68,7 +67,8 @@ export default function Example() {
     const res = await (
       await fetch("/api/car", { method: "GET", headers: { query: queryString, endPoint: "filter" } })
     ).json();
-    setCars(res);
+    if(res?.length)    setCars(res);
+    else setCars([])
   };
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Example() {
             },
           })
         ).json();
-        const makesOption = carMakes.map((make: string) => {
+        const makesOption = carMakes?.map((make: string) => {
           return { value: make, label: make, checked: false };
         });
         filters[0].options = makesOption;
@@ -364,7 +364,7 @@ export default function Example() {
                 ))}
               </form>
 
-              <div className="lg:col-span-3  justify-center 	">{<Products products={cars} />}</div>
+            {cars.length &&  <div className="lg:col-span-3  justify-center 	">{<Products products={cars} />}</div>}
             </div>
           </section>
         </main>
