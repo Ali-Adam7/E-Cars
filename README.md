@@ -5,11 +5,14 @@ How to run the project:
  cd into the folder: `cd <serviceName>`
 1) Install dependencies:<br>
    `npm install`
-2) Initialize Prisma ORM:<br>
+
+2) add .env file in the main directory with the database connection string: <br>
+`DATABASE_URL=mysql://username:password@127.0.0.1:3306/<serviceName>`
+4) Initialize Prisma ORM:<br>
    `npx prisma migrate dev --name init`
-3) Generate Prisma Client:<br>
+5) Generate Prisma Client:<br>
    `npx prisma generate`
-4) Run the microservice:<br>
+6) Run the microservice:<br>
   For Development:
   `npm run dev`
 
