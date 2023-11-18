@@ -1,0 +1,22 @@
+-- CreateTable
+CREATE TABLE `PO` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fname` VARCHAR(191) NOT NULL,
+    `lname` VARCHAR(191) NOT NULL,
+    `status` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `POItem` (
+    `id` INTEGER NOT NULL,
+    `vid` INTEGER NOT NULL,
+    `price` INTEGER NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `POItem` ADD CONSTRAINT `POItem_id_fkey` FOREIGN KEY (`id`) REFERENCES `PO`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
