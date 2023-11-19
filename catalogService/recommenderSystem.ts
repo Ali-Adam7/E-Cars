@@ -1,5 +1,5 @@
+// CreditL https://stackoverflow.com/questions/14327466/nearest-neighbour-in-dataset-node-js by Blago
 import { Car } from "@prisma/client";
-import { json } from "stream/consumers";
 
 const tokenize = (string: any) => {
   var tokens = [];
