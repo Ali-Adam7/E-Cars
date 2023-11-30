@@ -2,16 +2,8 @@
 
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { redirect } from "next/dist/server/api-utils";
-import { useRouter } from "next/navigation";
 
-function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
-}
-
-export default function Example() {
+export default function Calculator() {
   const [loan, setLoan] = useState(0);
   const [interest, setInterest] = useState(0);
   const [period, setPeriod] = useState(0);
@@ -19,6 +11,15 @@ export default function Example() {
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
   const [payment, setPayment] = useState(0);
+  const calculate = () => {
+    if (loan && downPayment && interest && period) {
+      const result =
+        (loan - downPayment) *
+        (((interest / 12) * Math.pow(1 + interest / 12, period)) / (Math.pow(1 + interest / 12, period) - 1));
+      setPayment(Math.ceil(result));
+      setOpen(true);
+    }
+  };
   return (
     <div className=" bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div
@@ -93,15 +94,7 @@ export default function Example() {
         <div className="mt-10">
           <button
             type="submit"
-            onClick={() => {
-              if (loan && downPayment && interest && period) {
-                const result =
-                  (loan - downPayment) *
-                  (((interest / 12) * Math.pow(1 + interest / 12, period)) / (Math.pow(1 + interest / 12, period) - 1));
-                setPayment(Math.ceil(result));
-                setOpen(true);
-              }
-            }}
+            onClick={calculate}
             className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Calculate

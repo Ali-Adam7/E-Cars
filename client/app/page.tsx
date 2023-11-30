@@ -1,5 +1,5 @@
-import Categories from "./components/Categories";
 import All from "./components/CarPictures";
+import Footer from "./components/Footer";
 import Front from "./components/Landing";
 
 export default async function Main() {
@@ -7,12 +7,9 @@ export default async function Main() {
   return (
     <div>
       <div className="bg-white">
-        {/* Mobile menu */}
-
         <header className="relative bg-white"></header>
       </div>
       <Front />
-      <Categories />
       <All />
     </div>
   );

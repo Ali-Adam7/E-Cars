@@ -1,0 +1,16 @@
+-- CreateTable
+CREATE TABLE `User` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `firstName` VARCHAR(255) NOT NULL,
+    `lastName` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+    `role` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `User_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+INSERT INTO `User` VALUES (1, 'admin@ecars.com', '$2a$10$aVsBPyI6q7cNeUW4gM5olOwmmkXZd2zjUxNKIUUfKXYFQEYKGeAay',CURRENT_TIMESTAMP(3),'admin','admin', 'ecars', 'admin' );

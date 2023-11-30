@@ -12,6 +12,8 @@ datasource db {
 
 model VisitEvent {
     time      DateTime
+    year      Int
+    month     Int
     carID     Int
     eventType String
 

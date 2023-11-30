@@ -48,7 +48,9 @@ export const shopCar: RequestHandler = async (req, res) => {
     const body = req.body;
     const id = parseInt(body.data.id);
     const quantity = parseInt(body.data.quantity);
-    const car = await dao.getByID(id);
+    //@ts-ignore
+    const { reviews, ...car } = await dao.getByID(id);
+
     if (car && car.quantity) {
       const updated = await dao.shopCar(car, quantity);
       res.send(updated);

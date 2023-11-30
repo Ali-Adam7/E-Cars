@@ -1,7 +1,9 @@
 import express, { Application, json } from "express";
 import dotenv from "dotenv";
 import fs from "fs";
-import { getUsageReportByID, recrodEvent } from "./services";
+import { getUsageReport, getUsageReportByID, recrodEvent } from "./services";
+import { middleware } from "./middleware";
+
 //For env File
 dotenv.config();
 const app: Application = express();
@@ -14,8 +16,11 @@ const helmet = require("helmet");
 var httpsServer = https.createServer(credentials, app);
 
 app.use(json());
-
-httpsServer.listen(port);
-
+app.use(helmet());
 app.post("/", recrodEvent);
-app.get("/", getUsageReportByID);
+app.use(middleware);
+app.put("/", getUsageReport);
+app.put("/:id", getUsageReportByID);
+
+app.listen(port, () => {});
+//httpsServer.listen(port);

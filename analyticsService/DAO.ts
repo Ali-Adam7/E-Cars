@@ -17,7 +17,10 @@ export class DAO {
   };
   getUsageReport = async () => {
     try {
-      const report = await prisma.visitEvent.groupBy({ by: ["eventType"], _count: { eventType: true } });
+      const report = await prisma.visitEvent.groupBy({
+        by: ["eventType", "year", "month"],
+        _count: true,
+      });
       console.log(report);
       return report;
     } catch (error) {
@@ -25,9 +28,14 @@ export class DAO {
     }
   };
 
-  getUsageReportByID = async () => {
+  getUsageReportByID = async (id: number) => {
     try {
-      const report = await prisma.visitEvent.groupBy({ by: ["eventType", "carID"], _count: { eventType: true } });
+      const report = await prisma.visitEvent.groupBy({
+        by: ["year", "month", "carID", "eventType"],
+        _count: true,
+        having: { carID: id },
+      });
+
       return report;
     } catch (error) {
       throw error;

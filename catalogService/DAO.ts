@@ -20,7 +20,7 @@ export class DAO {
 
   getByID = async (id: number): Promise<Car> => {
     try {
-      const car = (await prisma.car.findUnique({ where: { id: id } })) as Car;
+      const car = (await prisma.car.findUnique({ where: { id: id }, include: { reviews: true } })) as Car;
       return car;
     } catch (error: any) {
       throw error;
@@ -29,8 +29,9 @@ export class DAO {
 
   getByFilter = async (filters: any): Promise<Car[]> => {
     try {
+      const { yeargt, yearlt, ...fields } = filters;
       const filteredCars = (await prisma.car.findMany({
-        where: filters,
+        where: { ...fields, year: { gte: parseInt(yeargt), lte: parseInt(yearlt) } },
       })) as Car[];
       return filteredCars;
     } catch (error: any) {
@@ -75,6 +76,7 @@ export class DAO {
     }
   };
   postReview = async (review: Reviews) => {
+    console.log(review);
     try {
       const postedReview = await prisma.reviews.create({ data: { ...review } });
       return postedReview;

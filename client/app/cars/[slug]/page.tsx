@@ -2,25 +2,19 @@
 import { redirect } from "next/navigation";
 import ReviewsClient from "./ReviewsClient";
 import CarClient from "./CarClient";
+import { getCarById, getRecommendation } from "@/fetchHelper/catalog";
+import { recordView } from "@/fetchHelper/analytics";
+import Products from "../Products";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-  const id = params.slug;
+export default async function CarID({ params }: { params: { slug: string } }) {
+  const id = parseInt(params.slug);
+  const car = (await getCarById(id)) as Car;
+  if (!car) redirect("/cars");
 
-  const carRes = await fetch(`https://localhost:3000/api/car`, {
-    method: "GET",
-    headers: { endPoint: "ID", id: id },
-    cache: "no-store",
-  });
-  if (carRes.status != 200) {
-    redirect("/cars");
-  }
+  recordView(id);
+  const recommend = await getRecommendation(car);
 
-  const car = (await carRes.json()) as Car;
-  const reviews: Review[] = await (
-    await fetch(`https://localhost:3000/api/car`, { headers: { endPoint: "Reviews", id: id }, cache: "no-store" })
-  ).json();
-
-  const features = [
+  const filters = [
     { name: "Make", description: `${car?.make}` },
     { name: "Model", description: `${car?.model}` },
     { name: "Type", description: `${car?.type}` },
@@ -39,10 +33,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
           <p className="mt-4 text-gray-500">{car?.description}</p>
 
           <dl className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 sm:gap-y-16 lg:gap-x-8">
-            {features.map((feature) => (
-              <div key={feature.name} className="border-t border-gray-200 pt-4">
-                <dt className="font-medium text-gray-900">{feature.name}</dt>
-                <dd className="mt-2 text-sm text-gray-500">{feature.description}</dd>
+            {filters.map((filter) => (
+              <div key={filter.name} className="border-t border-gray-200 pt-4">
+                <dt className="font-medium text-gray-900">{filter.name}</dt>
+                <dd className="mt-2 text-sm text-gray-500">{filter.description}</dd>
               </div>
             ))}
           </dl>
@@ -60,8 +54,6 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <div className="grid grid-cols-4 ">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl ">Reviews</h2>
             </div>
-
-            <p className="mt-2 text-lg leading-8 text-gray-600">See what customers say about this car</p>
           </div>
 
           <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8   sm:mt-5 sm:pt-5 lg:mx-0 lg:max-w-none lg:grid-cols-1">
@@ -70,7 +62,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             <div className="bg-white mb-10">
               <div className="mx-auto max-w-7xl ">
                 <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-5 sm:pt-15 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                  {reviews?.map((post: Review) => {
+                  {car.reviews?.map((post: Review) => {
                     const stars = new Array(post.rating).fill(1);
                     return (
                       <article key={post.reviewID} className="flex max-w-xl flex-col items-start justify-between">
@@ -83,7 +75,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                             className="h-10 w-10 rounded-full bg-gray-50"
                           />
                           <div className="text-sm leading-6">
-                            <p className="font-semibold text-gray-900">
+                            <div className="font-semibold text-gray-900">
                               <div className="group relative ">
                                 <div className="rating">
                                   {stars.map((star, i) => {
@@ -100,7 +92,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                               </div>
                               <span className="absolute inset-0" />
                               {post.firstName}
-                            </p>
+                            </div>
                             <div className="flex items-start text-xs">
                               <div className="relative z-10  rounded-xl bg-gray-100  px-1 py-1.5  font-medium text-black ">
                                 {post.review}
@@ -114,9 +106,14 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 </div>
               </div>
             </div>
+
+            <div className="grid grid-cols-1 justify-self-start">
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl ">Similar Cars</h2>
+            </div>
           </div>
         </div>
       </div>
+      <Products products={recommend} />
     </div>
   );
 }

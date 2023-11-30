@@ -66,6 +66,11 @@ const numberSimilarity = (a: any, b: any) => {
   return 1 - distance;
 };
 
+const booleanSimalarity = (a: any, b: any) => {
+  if (a == b) return 1;
+  else return 0;
+};
+
 const recordSimilarity = (a: any, b: any) => {
   var fields = [
     { name: "make", measure: wordSimilarity },
@@ -74,6 +79,8 @@ const recordSimilarity = (a: any, b: any) => {
     { name: "milage", measure: numberSimilarity },
     { name: "price", measure: numberSimilarity },
     { name: "type", measure: wordSimilarity },
+    { name: "description", measure: wordSimilarity },
+    { name: "deal", measure: booleanSimalarity },
   ];
 
   var sum = 0;
@@ -103,5 +110,8 @@ export default (items: any, query: any) => {
       result = item;
     }
   }
-  return { top: result, map: [...map.entries()] };
+  const sorted = [...map.entries()].sort((a, b) => {
+    return b[1] - a[1];
+  });
+  return sorted;
 };

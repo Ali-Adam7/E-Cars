@@ -3,6 +3,7 @@ import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer } fro
 import { combineReducers } from "redux";
 import userReducer from "./userSlice";
 import cartReducer from "./cartSlice";
+import orderReducer from "./orderSlice";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 
 const createNoopStorage = () => {
@@ -28,6 +29,7 @@ const persistConfig = {
 const reducer = combineReducers({
   user: userReducer,
   cart: cartReducer,
+  order: orderReducer,
 });
 // this ensures your redux state is saved to persisted storage whenever it changes
 // we pass this to the store

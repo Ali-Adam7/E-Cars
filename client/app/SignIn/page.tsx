@@ -4,40 +4,36 @@ import store, { RootState } from "@/store/store";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn } from "@/store/userSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { signIn } from "@/fetchHelper/auth";
+import { initialize } from "@/store/cartSlice";
+import { addCar } from "@/fetchHelper/cart";
+import toast, { Toaster } from "react-hot-toast";
 
-export default function Example() {
+export default function SignIn() {
   const user = useSelector((state: RootState) => state.user);
+  const guestCart = useSelector((state: RootState) => state.cart);
+  const checkout = Boolean(useSearchParams().get("checkout"));
   const Router = useRouter();
-  if (user.token) {
-    Router.replace("/");
-  }
-  const login = async () => {
-    try {
-      if (password && email) {
-        const res = await fetch("/api/user", {
-          method: "POST",
-          body: JSON.stringify({ email: email, password: password }),
-          headers: {
-            "Content-Type": "application/json",
-            rejectUnauthorized: "false",
-            endPoint: "SignIn",
-            cache: "no-store",
-          },
-        });
+  if (user.token && !checkout) window.location.href = "/";
 
-        if (res.status === 404) {
-          alert("Wrong Email or Password");
-          return;
-        }
-        const user = (await res.json()) as User;
-        if (user.token) {
-          store.dispatch(logIn(user));
-          window.location.href = "/";
+  const login = async (event: any) => {
+    event.preventDefault();
+
+    const loggedInUser = await signIn(email, password);
+    if (!loggedInUser) {
+      toast.error("Wrong Email or Password");
+      return;
+    }
+    if (loggedInUser.token && loggedInUser.id) {
+      if (guestCart.length) {
+        store.dispatch(initialize(guestCart));
+        for (let i = 0; i < guestCart.length; i++) {
+          await addCar(loggedInUser?.id, guestCart[i].id, guestCart[i].quantity, loggedInUser.token);
         }
       }
-    } catch (error) {
-      console.log(error);
+      store.dispatch(logIn(loggedInUser));
+      if (checkout && guestCart.length) window.location.href = "/order";
     }
   };
   const [email, setEmail] = useState<String>("");
@@ -45,6 +41,8 @@ export default function Example() {
 
   return (
     <div className=" h-screen  bg-white  min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <Toaster position="top-center" reverseOrder={false} />
+
       <div className="  sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
           Sign in to your account
@@ -52,7 +50,7 @@ export default function Example() {
       </div>
 
       <div className=" mt-10 sm:mx-auto sm:w-full sm:max-w-sm ">
-        <div className=" space-y-6">
+        <form className=" space-y-6" onSubmit={login}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
               Email address
@@ -91,14 +89,11 @@ export default function Example() {
           </div>
 
           <div>
-            <button
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={() => login()}
-            >
+            <button className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
               Sign in
             </button>
           </div>
-        </div>
+        </form>
 
         <p className="mt-10 text-center text-sm text-gray-500"></p>
       </div>

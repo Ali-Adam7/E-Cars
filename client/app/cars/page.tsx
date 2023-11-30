@@ -4,7 +4,10 @@ import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
 import Products from "./Products";
+import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { getFilteredCars, getMakes } from "@/fetchHelper/catalog";
+import Slider from "@mui/material/Slider";
 
 const buildQueryString = (params: any) => {
   const queryString = Object.entries(params)
@@ -23,80 +26,85 @@ const sortOptions = [
   { name: "Milage: High to Low", current: false },
 ];
 
-const filters = [
-  {
-    id: "make",
-    name: "Make",
-    options: [],
-  },
-  {
-    id: "type",
-    name: "Type",
-    options: [
-      { value: "Sedan", label: "Sedan", checked: false },
-      { value: "SUV", label: "SUV", checked: false },
-      { value: "Truck", label: "Truck", checked: false },
-    ],
-  },
-  {
-    id: "history",
-    name: "Accident",
-    options: [{ value: "Yes", label: "Yes", checked: false }],
-  },
-];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
-  const [make] = useState(new Set());
-  const [type] = useState(new Set());
-  const [accident, setAccident] = useState<number>(0);
+export default function Filters() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const make = new Set(...[searchParams.get("make")?.split(",")]);
+  const type = new Set(...[searchParams.get("type")?.split(",")]);
+  let accident = parseInt(String(searchParams.get("history")));
   const [sort, setSort] = useState<string>("");
   const [cars, setCars] = useState<Car[]>([]);
+  const [year, setYear] = useState<number[]>([2010, 2024]);
+
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+  const [filters] = useState([
+    {
+      id: "make",
+      name: "Make",
+      options: [],
+    },
+    {
+      id: "type",
+      name: "Type",
+      options: [
+        { value: "Sedan", label: "Sedan", checked: type.has("Sedan") },
+        { value: "SUV", label: "SUV", checked: type.has("SUV") },
+        { value: "Truck", label: "Truck", checked: type.has("Truck") },
+      ],
+    },
+    {
+      id: "history",
+      name: "Accident",
+      options: [{ value: "True", label: "True", checked: Boolean(accident) }],
+    },
+  ]);
+
+  const handleYear = (event: Event, newValue: number | number[], activeThumb: number) => {
+    const minDistance = 2;
+
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (activeThumb === 0) {
+      setYear([Math.min(newValue[0], year[1] - minDistance), year[1]]);
+    } else {
+      setYear([year[0], Math.max(newValue[1], year[0] + minDistance)]);
+    }
+  };
+
   const getCars = async () => {
     const makes = [...make.keys()].join(",");
     const types = [...type.keys()].join(",");
     const params: any = {};
     if (makes) params["make"] = makes;
     if (types) params["type"] = types;
-    params["history"] = accident;
-    const queryString = buildQueryString(params);
-    const res = await (
-      await fetch("/api/car", { method: "GET", headers: { query: queryString, endPoint: "filter" } })
-    ).json();
-    if(res?.length)    setCars(res);
-    else setCars([])
+    if (accident != null) params["history"] = accident;
+    params["yeargt"] = year[0];
+    params["yearlt"] = year[1];
+    const cars = await getFilteredCars(buildQueryString(params));
+    setCars(cars);
+    router.replace(`/cars/${buildQueryString(params)}`);
   };
-
+  const getMake = async () => {
+    const carMakes = await getMakes();
+    const makesOption = carMakes?.map((carMake: string) => {
+      return { value: carMake, label: carMake, checked: make.has(carMake) };
+    });
+    filters[0].options = makesOption;
+  };
   useEffect(() => {
-    const getMake = async () => {
-      try {
-        const carMakes = await (
-          await fetch("/api/car", {
-            cache: "no-store",
-            method: "GET",
-            headers: {
-              endPoint: "make",
-            },
-          })
-        ).json();
-        const makesOption = carMakes?.map((make: string) => {
-          return { value: make, label: make, checked: false };
-        });
-        filters[0].options = makesOption;
-      } catch (error) {
-        console.log(error);
-      }
-    };
     getMake();
     getCars();
   }, []);
   return (
-    <div className="bg-white h-screen">
-      <div>
+    <div className="bg-white   h-full">
+      <div className="bg-white  h-full">
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog as="div" className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
             <Transition.Child
@@ -108,7 +116,7 @@ export default function Example() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
+              <div className="fixed inset-0 bg-white bg-opacity-25" />
             </Transition.Child>
 
             <div className="fixed inset-0 z-40 flex">
@@ -134,7 +142,6 @@ export default function Example() {
                     </button>
                   </div>
 
-                  {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
 
@@ -169,11 +176,11 @@ export default function Example() {
                                         if (val.target.checked) {
                                           if (sectionIdx === 0) make.add(val.target.value);
                                           else if (sectionIdx === 1) type.add(val.target.value);
-                                          else setAccident(1);
+                                          else accident = 1;
                                         } else {
                                           if (sectionIdx === 0) make.delete(val.target.value);
                                           else if (sectionIdx === 1) type.delete(val.target.value);
-                                          else setAccident(0);
+                                          else accident = 0;
                                         }
                                       }}
                                     />
@@ -198,8 +205,8 @@ export default function Example() {
           </Dialog>
         </Transition.Root>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 ">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-12">
+        <main className=" mx-auto  pb-72 sm:px-6 bg-white h-full ">
+          <div className="flex items-baseline  bg-white justify-between border-b border-gray-200 pb-6 pt-12">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Cars</h1>
 
             <div className="flex items-center">
@@ -299,14 +306,14 @@ export default function Example() {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6 ">
+          <div>
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+            <div className="grid grid-cols-1 bg-white h-full gap-x-8 gap-y-10 lg:grid-cols-5">
               {/* Filters */}
-              <form className="hidden lg:block">
+              <div className="hidden bg-white  lg:block p-10">
                 <h3 className="sr-only">Categories</h3>
 
                 {filters.map((section, sectionIdx) => (
@@ -340,11 +347,11 @@ export default function Example() {
                                     if (val.target.checked) {
                                       if (sectionIdx === 0) make.add(val.target.value);
                                       else if (sectionIdx === 1) type.add(val.target.value);
-                                      else setAccident(1);
+                                      else accident = 1;
                                     } else {
                                       if (sectionIdx === 0) make.delete(val.target.value);
                                       else if (sectionIdx === 1) type.delete(val.target.value);
-                                      else setAccident(0);
+                                      else accident = 0;
                                     }
                                   }}
                                 />
@@ -362,11 +369,67 @@ export default function Example() {
                     )}
                   </Disclosure>
                 ))}
-              </form>
+                <Disclosure as="div" className="border-b border-gray-100 py-6">
+                  {({ open }) => (
+                    <>
+                      <h3 className="-my-3 flow-root">
+                        <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                          <span className="font-medium text-gray-900">Year</span>
+                          <span className="ml-6 flex items-center">
+                            {open ? (
+                              <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                            ) : (
+                              <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                            )}
+                          </span>
+                        </Disclosure.Button>
+                      </h3>
+                      <Disclosure.Panel className="pt-6">
+                        <div className="space-y-4">
+                          <Slider
+                            marks
+                            min={2010}
+                            max={2024}
+                            getAriaLabel={() => "Minimum distance shift"}
+                            value={year}
+                            onChange={handleYear}
+                            valueLabelDisplay="auto"
+                            disableSwap
+                            sx={{
+                              color: "rgba(0,0,0,0.87)",
+                              height: 4,
+                              "& .MuiSlider-thumb": {
+                                width: 8,
+                                height: 8,
+                                transition: "0.3s cubic-bezier(.47,1.64,.41,.8)",
+                                "&:before": {
+                                  boxShadow: "0 2px 12px 0 rgba(0,0,0,0.4)",
+                                },
+                                "&:hover, &.Mui-focusVisible": {
+                                  boxShadow: `0px 0px 0px 8px ${"rgb(0 0 0 / 16%)"}`,
+                                },
+                                "&.Mui-active": {
+                                  width: 20,
+                                  height: 20,
+                                },
+                              },
+                              "& .MuiSlider-rail": {
+                                opacity: 0.28,
+                              },
+                            }}
+                          />
+                        </div>
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+              </div>
 
-            {cars.length &&  <div className="lg:col-span-3  justify-center 	">{<Products products={cars} />}</div>}
+              <div className="lg:col-span-4 h-full w-5/6 bg-white justify-self-center 	">
+                {<Products products={cars} />}
+              </div>
             </div>
-          </section>
+          </div>
         </main>
       </div>
     </div>

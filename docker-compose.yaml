@@ -1,0 +1,97 @@
+version: "3.8"
+services:
+
+  db:
+    image: mysql
+
+    restart: always
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+    networks:
+      - ecars
+
+  authervice:
+    build: ./authService
+    ports:
+      - "8002:8002"
+    container_name: auth
+    restart: always
+    depends_on:
+      - db
+    networks:
+      - ecars
+  
+  catalogservice:
+    build: ./catalogService
+    restart: always
+
+    ports:
+      - "8003:8003"
+    container_name: catalog
+
+    depends_on:
+      - db
+    networks:
+      - ecars
+  
+  analyticsservice:
+    build: ./analyticsService
+    restart: always
+
+    ports:
+      - "8005:8005"
+    container_name: analytics
+
+    depends_on:
+      - db
+    networks:
+      - ecars
+
+  orderservice:
+    build: ./ordersService
+    restart: always
+
+    ports:
+      - "8006:8006"
+    container_name: orders
+
+    depends_on:
+      - db
+    networks:
+      - ecars
+
+  shopping:
+    build: ./shoppingCartServices
+    restart: always
+
+    ports:
+      - "8004:8004"
+    container_name: shopping
+
+    depends_on:
+      - db
+    networks:
+      - ecars
+
+
+  nextjs:
+    build: ./client
+    restart: always
+
+    ports:
+      - "3000:3000"
+    container_name: nextjs
+
+    depends_on:
+      - db
+    networks:
+      - ecars
+  
+  
+networks:
+  ecars:
+    external: true
+    

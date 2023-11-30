@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import ReduxProvider from "../store/reduxProvider";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="bg-white">
         <ReduxProvider>
           <Navbar />
+
           {children}
+          <Footer />
         </ReduxProvider>
       </body>
     </html>

@@ -11,16 +11,18 @@ datasource db {
 }
 
 model PO {
-    id     Int    @id @default(autoincrement())
+    id     Int      @id @default(autoincrement())
     userID Int
     status String
+    items  POItem[]
 }
 
 model POItem {
-    id       Int
+    POid     Int
+    PO       PO  @relation(fields: [POid], references: [id])
     vid      Int
     price    Int
     quantity Int
 
-    @@id([id, vid])
+    @@id([POid, vid])
 }

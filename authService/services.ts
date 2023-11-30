@@ -32,6 +32,10 @@ export const registerUser: RequestHandler = async (req, res) => {
     createdUser.password = "";
     res.status(201).send({ ...createdUser, token: token, role: "user" });
   } catch (error: any) {
+    if (String(error).includes("PrismaClientKnownRequestError")) {
+      res.sendStatus(409);
+      return;
+    }
     console.log(error);
     isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }

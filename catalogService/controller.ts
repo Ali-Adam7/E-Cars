@@ -27,11 +27,13 @@ const helmet = require("helmet");
 var httpsServer = https.createServer(credentials, app);
 
 app.use(json());
+
 app.get("/", getCars);
+
 app.get("/:id", getCarByID);
 app.get("/review/:id", getCarReviews);
 app.get("/makes/all", getMakes);
-app.get("/car/recommender", getRecommendation);
+app.put("/car/recommender", getRecommendation);
 
 app.put("/order/:id", shopCar);
 app.post("/review/:id", postReview);
@@ -45,4 +47,4 @@ app.put("/:id", editCar);
 app.put("/car/shop", shopCar);
 app.delete("/:id", deleteCar);
 
-httpsServer.listen(port);
+app.listen(port, () => {});

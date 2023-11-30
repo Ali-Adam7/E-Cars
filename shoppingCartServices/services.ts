@@ -16,7 +16,7 @@ export const getAllCarts: RequestHandler = async (req, res) => {
 };
 export const getCartByID: RequestHandler = async (req, res) => {
   try {
-    const id = parseInt(req.params.id); //need id to match it with cartsID
+    const id = parseInt(req.params.cartID); //need id to match it with cartsID
     const result = await dao.getCartByID(id); //pass the id as parm
     if (result.length == 0) {
       res.sendStatus(404);
@@ -28,7 +28,7 @@ export const getCartByID: RequestHandler = async (req, res) => {
 
     const cars: any[] = [];
     for (let i = 0; i < cart.length; i++) {
-      const res = await fetch(`https://localhost:8003/${cart[i].carID}`, {
+      const res = await fetch(`http://catalog:8003/${cart[i].carID}`, {
         method: "GET",
         headers: {
           rejectUnauthorized: "false",

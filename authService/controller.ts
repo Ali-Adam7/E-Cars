@@ -20,4 +20,5 @@ app.get("/:id", getUserByID);
 app.post("/", registerUser);
 app.put("/", authenticateUser);
 
-httpsServer.listen(port);
+//httpsServer.listen(port);
+app.listen(port, () => {});
