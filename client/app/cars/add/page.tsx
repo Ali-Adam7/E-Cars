@@ -12,7 +12,7 @@ export default async function Calculator() {
     if (!car["history"]) car["history"] = false;
     console.log(car);
 
-    const res = await fetch("http://catalog:8003/", {
+    const res = await fetch("http://localhost:8003/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(car),

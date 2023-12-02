@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { getOrders } from "@/fetchHelper/order";
+import { getOrders } from "@/api/order";
 
 export default function Example() {
   const [orders, setOrders] = useState([]);

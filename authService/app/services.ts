@@ -2,22 +2,14 @@ import { RequestHandler } from "express";
 import { DAO } from "./DAO";
 import fs from "fs";
 import { User } from "@prisma/client";
+import path from "path";
+import { isValidationError } from "./util";
 
 const dao = new DAO();
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
-
-// sign with RSA SHA256
-const privateKey = fs.readFileSync("key.pem");
-const isValidationError = (error: any) => {
-  return String(error).includes("PrismaClientValidationError");
-};
-export const validatePassword = (password: string, hash: string) => {
-  bcrypt.compare(password, hash, function (err: Error, result: boolean) {
-    return result;
-  });
-};
+const privateKey = fs.readFileSync(path.resolve(__dirname, "../certificates/key.pem"), "utf8");
 
 export const registerUser: RequestHandler = async (req, res) => {
   try {
@@ -44,7 +36,6 @@ export const registerUser: RequestHandler = async (req, res) => {
 export const authenticateUser: RequestHandler = async (req, res) => {
   try {
     const dbUser = await dao.getUserByEmail(req.body.email);
-
     if (dbUser) {
       const validation = await bcrypt.compare(req.body.password, dbUser.password);
       if (validation) {
@@ -53,11 +44,9 @@ export const authenticateUser: RequestHandler = async (req, res) => {
         res.status(202).json({ ...dbUser, token: token });
         return;
       }
-
       res.sendStatus(404);
       return;
     }
-
     res.sendStatus(404);
     return;
   } catch (error: any) {
@@ -65,9 +54,14 @@ export const authenticateUser: RequestHandler = async (req, res) => {
     isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
   }
 };
+
 export const getUserByID: RequestHandler = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (isNaN(id)) {
+      res.sendStatus(400);
+      return;
+    }
     const user = await dao.getUserByID(id);
     if (user) {
       res.status(200).json(user);

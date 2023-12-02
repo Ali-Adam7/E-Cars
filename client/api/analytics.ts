@@ -1,7 +1,7 @@
 const URL = process.env.NEXT_URL || "http://localhost:3000";
 
 export const recordView = async (carID: number) => {
-  fetch(`${URL}/api/analytics/`, {
+  fetch(`${URL}/aws/analytics/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -15,7 +15,7 @@ export const recordView = async (carID: number) => {
 };
 
 export const recordCart = async (carID: number) => {
-  fetch(`/api/analytics/`, {
+  fetch(`/aws/analytics/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -29,7 +29,7 @@ export const recordCart = async (carID: number) => {
 };
 
 export const recordOrder = async (carID: number) => {
-  fetch(`/api/analytics/`, {
+  fetch(`/aws/analytics/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -43,7 +43,7 @@ export const recordOrder = async (carID: number) => {
 };
 
 export const usuageReport = async (user: User) => {
-  const res = await fetch(`/api/analytics/`, {
+  const res = await fetch(`/aws/analytics/`, {
     method: "PUT",
     body: JSON.stringify({ token: user.token }),
     headers: { "Content-Type": "application/json" },
@@ -52,7 +52,7 @@ export const usuageReport = async (user: User) => {
 };
 
 export const salesReport = async (user: User, carID: number) => {
-  const res = await fetch(`/api/analytics/${carID}`, {
+  const res = await fetch(`/aws/analytics/${carID}`, {
     method: "PUT",
     body: JSON.stringify({ token: user.token }),
     headers: { "Content-Type": "application/json" },

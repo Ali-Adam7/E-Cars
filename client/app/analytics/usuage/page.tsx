@@ -1,18 +1,17 @@
 "use client";
 
-import { usuageReport } from "@/fetchHelper/analytics";
+import { usuageReport } from "@/api/analytics";
 import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 import { useSelector } from "react-redux";
 
-export default function Calculator() {
+export default function Usuage() {
   const user = useSelector((state: RootState) => state.user);
   const [usuage, setUsuage] = useState([]);
   const get = async () => {
     setUsuage(await usuageReport(user));
   };
-
   useEffect(() => {
     get();
   }, []);

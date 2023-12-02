@@ -2,7 +2,7 @@ const URL = process.env.NEXT_URL || "http://localhost:3000";
 export const addCar = async (cartID: number, carID: number, quantity: number, token: string): Promise<void> => {
   try {
     for (let i = 0; i < quantity; i++) {
-      await fetch(`/api/shoppingCart/${cartID}/${carID}`, {
+      await fetch(`/aws/shoppingCart/${cartID}/${carID}`, {
         method: "POST",
         body: JSON.stringify({ token: token }),
         headers: { "Content-Type": "application/json" },
@@ -15,7 +15,7 @@ export const addCar = async (cartID: number, carID: number, quantity: number, to
 
 export const getCart = async (cartID: number, token: string): Promise<Car[]> => {
   try {
-    const cart = await fetch(`/api/shoppingCart/${cartID}/`, {
+    const cart = await fetch(`/aws/shoppingCart/${cartID}/`, {
       method: "PUT",
       body: JSON.stringify({ token: token }),
       headers: { "Content-Type": "application/json" },
@@ -28,7 +28,7 @@ export const getCart = async (cartID: number, token: string): Promise<Car[]> => 
 };
 export const removeCar = async (cartID: number, carID: number, token: string): Promise<number> => {
   try {
-    const res = await fetch(`/api/shoppingCart/${cartID}/${carID}`, {
+    const res = await fetch(`/aws/shoppingCart/${cartID}/${carID}`, {
       method: "DELETE",
       body: JSON.stringify({ token: token }),
       headers: { "Content-Type": "application/json" },

@@ -3,7 +3,7 @@
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon as XMarkIconMini } from "@heroicons/react/20/solid";
 import { useSelector } from "react-redux";
 import store, { RootState } from "@/store/store";
-import { removeCar } from "@/fetchHelper/cart";
+import { removeCar } from "@/api/cart";
 import { removeFromCart } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 import Link from "next/link";

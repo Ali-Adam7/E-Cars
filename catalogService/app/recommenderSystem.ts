@@ -75,12 +75,11 @@ const recordSimilarity = (a: any, b: any) => {
   var fields = [
     { name: "make", measure: wordSimilarity },
     { name: "model", measure: wordSimilarity },
-    { name: "year", measure: yearSimilarity },
     { name: "milage", measure: numberSimilarity },
     { name: "price", measure: numberSimilarity },
     { name: "type", measure: wordSimilarity },
-    { name: "description", measure: wordSimilarity },
     { name: "deal", measure: booleanSimalarity },
+    { name: "history", measure: booleanSimalarity },
   ];
 
   var sum = 0;

@@ -4,7 +4,7 @@ import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
-import { postReview } from "@/fetchHelper/catalog";
+import { postReview } from "@/api/catalog";
 import toast, { Toaster } from "react-hot-toast";
 export default function ReviewClient({ car }: any) {
   const [open, setOpen] = useState(false);

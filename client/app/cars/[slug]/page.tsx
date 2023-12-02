@@ -1,15 +1,13 @@
 "use server";
-import { redirect } from "next/navigation";
 import ReviewsClient from "./ReviewsClient";
 import CarClient from "./CarClient";
-import { getCarById, getRecommendation } from "@/fetchHelper/catalog";
-import { recordView } from "@/fetchHelper/analytics";
+import { getCarById, getRecommendation } from "@/api/catalog";
+import { recordView } from "@/api/analytics";
 import Products from "../Products";
 
 export default async function CarID({ params }: { params: { slug: string } }) {
   const id = parseInt(params.slug);
   const car = (await getCarById(id)) as Car;
-  if (!car) redirect("/cars");
 
   recordView(id);
   const recommend = await getRecommendation(car);
@@ -19,7 +17,7 @@ export default async function CarID({ params }: { params: { slug: string } }) {
     { name: "Model", description: `${car?.model}` },
     { name: "Type", description: `${car?.type}` },
     { name: "Year", description: `${car?.year}` },
-    { name: "Milage", description: `${car?.milage}` },
+    { name: "Milage", description: `${car?.milage} Km` },
     { name: "Price", description: `$${car?.price}` },
   ];
 
@@ -62,7 +60,7 @@ export default async function CarID({ params }: { params: { slug: string } }) {
             <div className="bg-white mb-10">
               <div className="mx-auto max-w-7xl ">
                 <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 border-t border-gray-200 pt-10 sm:mt-5 sm:pt-15 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                  {car.reviews?.map((post: Review) => {
+                  {car?.reviews?.map((post: Review) => {
                     const stars = new Array(post.rating).fill(1);
                     return (
                       <article key={post.reviewID} className="flex max-w-xl flex-col items-start justify-between">

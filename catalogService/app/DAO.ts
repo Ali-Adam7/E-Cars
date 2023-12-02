@@ -1,13 +1,6 @@
-const mysql = require("mysql2/promise");
 import dotenv from "dotenv";
-import fs from "fs";
-import path from "path";
 import { Car, PrismaClient, Reviews } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
-import { AnyARecord } from "dns";
 const prisma = new PrismaClient();
-dotenv.config();
-
 export class DAO {
   getAllCars = async (): Promise<Car[]> => {
     try {
@@ -76,7 +69,6 @@ export class DAO {
     }
   };
   postReview = async (review: Reviews) => {
-    console.log(review);
     try {
       const postedReview = await prisma.reviews.create({ data: { ...review } });
       return postedReview;

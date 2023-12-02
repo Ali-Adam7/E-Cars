@@ -1,12 +1,12 @@
 import { RequestHandler } from "express";
 import { DAO } from "./DAO";
-import { Car, Prisma, Reviews } from "@prisma/client";
+import { Car } from "@prisma/client";
 import recommenderSystem from "./recommenderSystem";
-const isValidationError = (error: any) => {
-  return String(error).includes("PrismaClientValidationError");
-};
+import { createPrismFilters, isValidationError } from "./util";
+
 const dao = new DAO();
 const allCars = dao.getAllCars();
+
 export const getCars: RequestHandler = async (req, res) => {
   try {
     if (!Object.keys(req.query).length) {
@@ -14,16 +14,11 @@ export const getCars: RequestHandler = async (req, res) => {
       res.json(cars);
       return;
     }
-    const queryFilters = { ...req.query } as Partial<Car>;
-    if (queryFilters.year) queryFilters.year = parseInt(String(req.query.year));
-    if (queryFilters.milage) queryFilters.milage = parseInt(String(req.query.milage));
-    if (queryFilters.price) queryFilters.price = parseInt(String(req.query.price));
-    const makeFilter = queryFilters.make?.split(",") as string[];
-    const typeFilter = queryFilters.type?.split(",") as string[];
-    const history = Boolean(parseInt(String(queryFilters.history)));
-    const filter = { ...queryFilters, make: { in: makeFilter }, type: { in: typeFilter }, history: history };
+
+    const filter = createPrismFilters(req.query);
     const cars = await dao.getByFilter(filter);
     res.status(200).json(cars);
+    return;
   } catch (error: any) {
     console.log(error);
     res.sendStatus(500);
@@ -33,10 +28,14 @@ export const getCars: RequestHandler = async (req, res) => {
 export const getCarByID: RequestHandler = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
+    if (Number.isNaN(id)) {
+      res.sendStatus(400);
+      return;
+    }
     const car = await dao.getByID(id);
-
     if (car) res.json(car);
-    else res.status(404).send({});
+    else res.sendStatus(404);
+    return;
   } catch (error) {
     console.log(error);
     isValidationError(error) ? res.sendStatus(400) : res.sendStatus(500);
@@ -50,7 +49,6 @@ export const shopCar: RequestHandler = async (req, res) => {
     const quantity = parseInt(body.data.quantity);
     //@ts-ignore
     const { reviews, ...car } = await dao.getByID(id);
-
     if (car && car.quantity) {
       const updated = await dao.shopCar(car, quantity);
       res.send(updated);
@@ -126,13 +124,10 @@ export const postReview: RequestHandler = async (req, res) => {
 export const getMakes: RequestHandler = async (req, res) => {
   try {
     const result = (await dao.getMakes()) as [];
-    const makes = result.map((res: { make: string }) => {
-      return res.make;
-    });
+    const makes = result.map((res: { make: string }) => res.make);
     res.status(200).send(makes);
   } catch (error) {
     console.log(error);
-
     res.sendStatus(500);
   }
 };

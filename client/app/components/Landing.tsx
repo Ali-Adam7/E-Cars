@@ -1,6 +1,6 @@
 import Link from "next/link";
+import Chat from "./Chat";
 
-const URL = process.env.NEXT_URL || "http://localhost:3000";
 const callouts = [
   {
     name: "Sedan",
@@ -8,7 +8,7 @@ const callouts = [
     imageSrc:
       "https://media.ed.edmunds-media.com/tesla/model-s/2019/oem/2019_tesla_model-s_sedan_performance_fq_oem_1_1600.jpg",
     imageAlt: "Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.",
-    href: `${URL}/cars?type=Sedan`,
+    href: `cars?type=Sedan`,
   },
   {
     name: "SUV",
@@ -16,7 +16,7 @@ const callouts = [
     imageSrc:
       "https://assets-eu-01.kc-usercontent.com/3b3d460e-c5ae-0195-6b86-3ac7fb9d52db/1ce5ecec-cb1e-4be7-918f-b1d89e2967f9/Tesla%20Model%20X%20%283%29.jpg?fm=jpg&auto=format",
     imageAlt: "Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.",
-    href: `${URL}/cars?type=SUV`,
+    href: `cars?type=SUV`,
   },
   {
     name: "Trucks",
@@ -24,13 +24,14 @@ const callouts = [
     imageSrc:
       "https://hips.hearstapps.com/hmg-prod/images/tesla-cybertruck-101-1574400035.jpg?crop=0.669xw:1.00xh;0.167xw,0&resize=640:*",
     imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
-    href: `${URL}/cars?type=Truck`,
+    href: `cars?type=Truck`,
   },
 ];
 export default function Landing() {
   return (
     <div className="relative bg-white">
       {/* Background image and overlap */}
+      <Chat />
       <div aria-hidden="true" className="absolute inset-0 hidden sm:flex sm:flex-col">
         <div className="relative w-full flex-1 bg-gray-800">
           <div className="absolute inset-0 overflow-hidden">

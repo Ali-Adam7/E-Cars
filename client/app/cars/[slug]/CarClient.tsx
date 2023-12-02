@@ -1,6 +1,6 @@
 "use client";
-import { recordCart } from "@/fetchHelper/analytics";
-import { addCar } from "@/fetchHelper/cart";
+import { recordCart } from "@/api/analytics";
+import { addCar } from "@/api/cart";
 import { addToCart } from "@/store/cartSlice";
 import store, { RootState } from "@/store/store";
 import { useSelector } from "react-redux";

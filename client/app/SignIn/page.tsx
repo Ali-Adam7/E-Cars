@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logIn } from "@/store/userSlice";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "@/fetchHelper/auth";
+import { signIn } from "@/api/auth";
 import { initialize } from "@/store/cartSlice";
-import { addCar } from "@/fetchHelper/cart";
+import { addCar } from "@/api/cart";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function SignIn() {

@@ -1,5 +1,5 @@
 export const signIn = async (email: String, password: String): Promise<User | null> => {
-  const res = await fetch("/api/auth/", {
+  const res = await fetch("/aws/auth/", {
     method: "PUT",
     body: JSON.stringify({ email: email, password: password }),
     headers: { "Content-Type": "application/json" },
@@ -10,7 +10,7 @@ export const signIn = async (email: String, password: String): Promise<User | nu
 
 export const registerUser = async (user: Partial<User>): Promise<User | null> => {
   try {
-    const res = await fetch("/api/auth/", {
+    const res = await fetch("/aws/auth/", {
       method: "POST",
       body: JSON.stringify(user),
       headers: { "Content-Type": "application/json" },

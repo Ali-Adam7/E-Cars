@@ -1,6 +1,4 @@
-const mysql = require("mysql2/promise");
 import { PrismaClient, VisitEvent } from "@prisma/client";
-import { count } from "console";
 import dotenv from "dotenv";
 const prisma = new PrismaClient();
 dotenv.config();
@@ -21,7 +19,6 @@ export class DAO {
         by: ["eventType", "year", "month"],
         _count: true,
       });
-      console.log(report);
       return report;
     } catch (error) {
       throw error;

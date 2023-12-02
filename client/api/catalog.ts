@@ -1,7 +1,7 @@
 const URL = process.env.NEXT_URL || "http://localhost:3000";
 export const getFilteredCars = async (queryString: string): Promise<Car[]> => {
   try {
-    const response = await fetch(`/api/catalog/${queryString}`);
+    const response = await fetch(`/aws/catalog/${queryString}`);
     if (response.status === 200) return await response.json();
     return [];
   } catch {
@@ -11,7 +11,7 @@ export const getFilteredCars = async (queryString: string): Promise<Car[]> => {
 
 export const getMakes = async (): Promise<string[]> => {
   try {
-    const carMakes = await fetch("/api/catalog/makes/all");
+    const carMakes = await fetch("/aws/catalog/makes/all");
     if (carMakes.status == 200) return await carMakes.json();
     return [];
   } catch (error) {
@@ -21,7 +21,7 @@ export const getMakes = async (): Promise<string[]> => {
 
 export const getCarById = async (id: number): Promise<Car | null> => {
   try {
-    const car = await fetch(`${URL}/api/catalog/${id}`, { cache: "no-cache" });
+    const car = await fetch(`${URL}/aws/catalog/${id}`, { cache: "no-cache" });
 
     if (car.status == 200) return await car.json();
     return null;
@@ -32,7 +32,7 @@ export const getCarById = async (id: number): Promise<Car | null> => {
 
 export const getRecommendation = async (car: Car) => {
   try {
-    const cars = await fetch(`${URL}/api/catalog/car/recommender`, {
+    const cars = await fetch(`${URL}/aws/catalog/car/recommender`, {
       method: "PUT",
       body: JSON.stringify(car),
       cache: "no-store",
@@ -56,7 +56,7 @@ export const getRecommendation = async (car: Car) => {
 
 export const getReviews = async (id: number): Promise<Review[]> => {
   try {
-    const reviews = await fetch(`${URL}/api/catalog/review/${id}`, { cache: "no-cache" });
+    const reviews = await fetch(`${URL}/aws/catalog/review/${id}`, { cache: "no-cache" });
     if (reviews.status == 200) return await reviews.json();
     return [];
   } catch {
@@ -66,7 +66,7 @@ export const getReviews = async (id: number): Promise<Review[]> => {
 
 export const postReview = async (review: Review, id: number): Promise<void> => {
   try {
-    const res = await fetch(`/api/catalog/review/${id}`, {
+    const res = await fetch(`/aws/catalog/review/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(review),
@@ -78,7 +78,7 @@ export const postReview = async (review: Review, id: number): Promise<void> => {
 
 export const getDeals = async (): Promise<Car[]> => {
   try {
-    const res = await fetch(`${URL}/api/catalog/deals/all/`, { cache: "no-cache" });
+    const res = await fetch(`${URL}/aws/catalog/deals/all/`, { cache: "no-cache" });
     if (res.status == 200) return await res.json();
     return [];
   } catch {

@@ -1,8 +1,8 @@
 "use client";
 
-import { salesReport, usuageReport } from "@/fetchHelper/analytics";
+import { salesReport } from "@/api/analytics";
 import { RootState } from "@/store/store";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Chart } from "react-google-charts";
 import toast, { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";

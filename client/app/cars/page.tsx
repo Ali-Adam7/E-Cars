@@ -6,7 +6,7 @@ import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from
 import Products from "./Products";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { getFilteredCars, getMakes } from "@/fetchHelper/catalog";
+import { getFilteredCars, getMakes } from "@/api/catalog";
 import Slider from "@mui/material/Slider";
 
 const buildQueryString = (params: any) => {

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:lts-alpine
+FROM  node:lts-alpine
 WORKDIR /app
 
 # COPY package.json and package-lock.json files

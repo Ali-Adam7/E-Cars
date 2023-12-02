@@ -1,7 +1,7 @@
 "use client";
 
-import { recordOrder } from "@/fetchHelper/analytics";
-import { guestOrder, submitOrder } from "@/fetchHelper/order";
+import { recordOrder } from "@/api/analytics";
+import { guestOrder, submitOrder } from "@/api/order";
 import { emptyCart } from "@/store/cartSlice";
 import { setOrder } from "@/store/orderSlice";
 import store, { RootState } from "@/store/store";

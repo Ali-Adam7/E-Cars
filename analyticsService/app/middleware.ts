@@ -1,8 +1,8 @@
 import { RequestHandler } from "express";
 import fs from "fs";
 const jwt = require("jsonwebtoken");
-const privateKey = fs.readFileSync("key.pem", "utf8");
-
+import path from "path";
+const privateKey = fs.readFileSync(path.resolve(__dirname, "../certificates/key.pem"), "utf8");
 export const middleware: RequestHandler = async (req, res, next) => {
   const { token } = req.body;
   try {
@@ -13,7 +13,6 @@ export const middleware: RequestHandler = async (req, res, next) => {
     }
     next();
   } catch (error) {
-    console.log(error);
     res.sendStatus(403);
   }
 };

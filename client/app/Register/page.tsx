@@ -1,6 +1,6 @@
 "use client";
-import { registerUser } from "@/fetchHelper/auth";
-import { addCar } from "@/fetchHelper/cart";
+import { registerUser } from "@/api/auth";
+import { addCar } from "@/api/cart";
 import { initialize } from "@/store/cartSlice";
 import store, { RootState } from "@/store/store";
 import { logIn } from "@/store/userSlice";

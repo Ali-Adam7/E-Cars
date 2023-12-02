@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/controller.js",
-    "dev": "nodemon controller.ts"
+    "dev": "nodemon app/controller.ts"
   },
   "keywords": [],
   "author": "",

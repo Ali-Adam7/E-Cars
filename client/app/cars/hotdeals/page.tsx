@@ -1,6 +1,6 @@
 "use server";
 
-import { getDeals } from "@/fetchHelper/catalog";
+import { getDeals } from "@/api/catalog";
 import Link from "next/link";
 
 export default async function deals() {
