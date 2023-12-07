@@ -1,7 +1,7 @@
-const URL = process.env.NEXT_URL || "http://localhost:3000";
-
+const analyticsURL = process.env.ANALYTICS_URL || "http://localhost:8005";
 export const recordView = async (carID: number) => {
-  fetch(`${URL}/aws/analytics/`, {
+  // Server side function
+  fetch(`${analyticsURL}/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

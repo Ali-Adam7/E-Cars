@@ -1,4 +1,6 @@
-const URL = process.env.NEXT_URL || "http://localhost:3000";
+const CATALOG_URL = process.env.CATALOG_URL || "http://localhost:8003";
+// Server side function
+
 export const getFilteredCars = async (queryString: string): Promise<Car[]> => {
   try {
     const response = await fetch(`/aws/catalog/${queryString}`);
@@ -21,7 +23,7 @@ export const getMakes = async (): Promise<string[]> => {
 
 export const getCarById = async (id: number): Promise<Car | null> => {
   try {
-    const car = await fetch(`${URL}/aws/catalog/${id}`, { cache: "no-cache" });
+    const car = await fetch(`${CATALOG_URL}/${id}`, { cache: "no-cache" });
 
     if (car.status == 200) return await car.json();
     return null;
@@ -32,7 +34,7 @@ export const getCarById = async (id: number): Promise<Car | null> => {
 
 export const getRecommendation = async (car: Car) => {
   try {
-    const cars = await fetch(`${URL}/aws/catalog/car/recommender`, {
+    const cars = await fetch(`${CATALOG_URL}/car/recommender`, {
       method: "PUT",
       body: JSON.stringify(car),
       cache: "no-store",
@@ -56,7 +58,7 @@ export const getRecommendation = async (car: Car) => {
 
 export const getReviews = async (id: number): Promise<Review[]> => {
   try {
-    const reviews = await fetch(`${URL}/aws/catalog/review/${id}`, { cache: "no-cache" });
+    const reviews = await fetch(`${CATALOG_URL}/review/${id}`, { cache: "no-cache" });
     if (reviews.status == 200) return await reviews.json();
     return [];
   } catch {
@@ -78,7 +80,7 @@ export const postReview = async (review: Review, id: number): Promise<void> => {
 
 export const getDeals = async (): Promise<Car[]> => {
   try {
-    const res = await fetch(`${URL}/aws/catalog/deals/all/`, { cache: "no-cache" });
+    const res = await fetch(`${CATALOG_URL}/deals/all/`, { cache: "no-cache" });
     if (res.status == 200) return await res.json();
     return [];
   } catch {
