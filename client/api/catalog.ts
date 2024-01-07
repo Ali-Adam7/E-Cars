@@ -23,7 +23,7 @@ export const getMakes = async (): Promise<string[]> => {
 
 export const getCarById = async (id: number): Promise<Car | null> => {
   try {
-    const car = await fetch(`${CATALOG_URL}/${id}`, { cache: "no-cache" });
+    const car = await fetch(`${CATALOG_URL}/${id}`);
 
     if (car.status == 200) return await car.json();
     return null;
@@ -37,7 +37,6 @@ export const getRecommendation = async (car: Car) => {
     const cars = await fetch(`${CATALOG_URL}/car/recommender`, {
       method: "PUT",
       body: JSON.stringify(car),
-      cache: "no-store",
       headers: { "Content-Type": "application/json" },
     });
     if (cars.status == 200) {
@@ -45,7 +44,7 @@ export const getRecommendation = async (car: Car) => {
       const recommender: Car[] = [];
 
       result.forEach((car: any) => {
-        if (car[1] > 0.5) recommender.push(car[0]);
+        if (car[1] > 0.65) recommender.push(car[0]);
       });
       return recommender;
     }
@@ -80,7 +79,7 @@ export const postReview = async (review: Review, id: number): Promise<void> => {
 
 export const getDeals = async (): Promise<Car[]> => {
   try {
-    const res = await fetch(`${CATALOG_URL}/deals/all/`, { cache: "no-cache" });
+    const res = await fetch(`${CATALOG_URL}/deals/all/`);
     if (res.status == 200) return await res.json();
     return [];
   } catch {

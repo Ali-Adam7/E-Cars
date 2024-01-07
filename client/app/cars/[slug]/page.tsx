@@ -4,11 +4,11 @@ import CarClient from "./CarClient";
 import { getCarById, getRecommendation } from "@/api/catalog";
 import { recordView } from "@/api/analytics";
 import Products from "../Products";
-
+import { redirect } from "next/navigation";
 export default async function CarID({ params }: { params: { slug: string } }) {
   const id = parseInt(params.slug);
   const car = (await getCarById(id)) as Car;
-
+  if (!car) redirect("/cars");
   recordView(id);
   const recommend = await getRecommendation(car);
 
@@ -41,7 +41,7 @@ export default async function CarID({ params }: { params: { slug: string } }) {
         </div>
 
         <div>
-          <img src={car?.img} alt="" className="rounded-xl bg-gray-100 xl:ml-20" />
+          <img src={`/cars/${id}.jpg`} alt="" className="rounded-xl bg-gray-100 xl:ml-20" />
         </div>
         <CarClient car={car} />
       </div>

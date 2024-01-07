@@ -9,16 +9,14 @@ const prisma = new PrismaClient();
 export class DAO {
   registerUser = async (user: User) => {
     try {
-      const createdUser = await prisma.user.create({ data: user });
-      return createdUser;
+      return await prisma.user.create({ data: user });
     } catch (error: any) {
       throw error;
     }
   };
   getUserByEmail = async (email: string) => {
     try {
-      const user = await prisma.user.findUnique({ where: { email: email } });
-      return user;
+      return await prisma.user.findUnique({ where: { email: email } });
     } catch (error: any) {
       throw error;
     }
@@ -26,8 +24,7 @@ export class DAO {
 
   getUserByID = async (id: number) => {
     try {
-      const user = await prisma.user.findUnique({ where: { id: id }, select: { firstName: true } });
-      return user;
+      return await prisma.user.findUnique({ where: { id: id }, select: { firstName: true } });
     } catch (error: any) {
       throw error;
     }

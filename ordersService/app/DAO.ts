@@ -23,7 +23,6 @@ export class DAO {
   };
 
   getPastOrders = async (id: number) => {
-    let orders = await prisma.pO.findMany({ where: { userID: id }, include: { items: true } });
-    return orders;
+    return await prisma.pO.findMany({ where: { userID: id }, include: { items: true } });
   };
 }

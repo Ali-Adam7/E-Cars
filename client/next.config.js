@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-
+const withImages = require("next-images");
 module.exports = {
   async rewrites() {
     const catalogURL = process.env.CATALOG_URL || "http://localhost:8003";
