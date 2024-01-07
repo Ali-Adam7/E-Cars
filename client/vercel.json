@@ -2,23 +2,23 @@
     "rewrites": [
         {
             "source": "/aws/catalog/:route*",
-            "destination": "http://ecarsLB-495972997.us-east-1.elb.amazonaws.com:8003/:route*"
+            "destination": "http://ec2-54-80-223-16.compute-1.amazonaws.com:8003/:route*"
           },
           {
             "source": "/aws/auth/:route*",
-            "destination": "http://ecarsLB-495972997.us-east-1.elb.amazonaws.com:8002/:route*"
+            "destination": "http://ec2-54-80-223-16.compute-1.amazonaws.com:8002/:route*"
           },
           {
             "source": "/aws/orders/:route*",
-            "destination": "http://ecarsLB-495972997.us-east-1.elb.amazonaws.com:8006/:route*"
+            "destination": "http://ec2-54-80-223-16.compute-1.amazonaws.com:8006/:route*"
           },
           {
             "source": "/aws/shoppingCart/:route*",
-            "destination": "http://ecarsLB-495972997.us-east-1.elb.amazonaws.com:8004/:route*"
+            "destination": "http://ec2-54-80-223-16.compute-1.amazonaws.com:8004/:route*"
           },
           {
             "source": "/aws/analytics/:route*",
-            "destination": "http://ecarsLB-495972997.us-east-1.elb.amazonaws.com:8005/:route*"
+            "destination": "http://ec2-54-80-223-16.compute-1.amazonaws.com:8005/:route*"
           }
     ]
   }

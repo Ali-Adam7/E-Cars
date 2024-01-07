@@ -8,8 +8,7 @@ const prisma = new PrismaClient();
 export class DAO {
   getAllCarts = async (): Promise<Cart[]> => {
     try {
-      const allCarts = (await prisma.cart.findMany()) as Cart[];
-      return allCarts;
+      return (await prisma.cart.findMany()) as Cart[];
     } catch (error: any) {
       throw error;
     }
@@ -17,8 +16,7 @@ export class DAO {
 
   getCartByID = async (id: number): Promise<Cart[]> => {
     try {
-      const cart = await prisma.cart.findMany({ where: { id: id } });
-      return cart;
+      return await prisma.cart.findMany({ where: { id: id } });
     } catch (error: any) {
       throw error;
     }
@@ -43,9 +41,7 @@ export class DAO {
 
   async deleteCart(cartID: number): Promise<number> {
     try {
-      const cart = await prisma.cart.deleteMany({ where: { id: cartID } });
-
-      return cart.count;
+      return (await prisma.cart.deleteMany({ where: { id: cartID } })).count;
     } catch (error: any) {
       throw error;
     }
@@ -69,8 +65,7 @@ export class DAO {
   }
   async getCarQuantity(cartID: number, carID: number): Promise<number | null> {
     try {
-      const previusQuantity = (await prisma.cart.findMany({ where: { id: cartID, carID: carID } }))[0]?.quantity;
-      return previusQuantity;
+      return (await prisma.cart.findMany({ where: { id: cartID, carID: carID } }))[0]?.quantity;
     } catch (error) {
       throw error;
     }

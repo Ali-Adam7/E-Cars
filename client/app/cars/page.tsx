@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
@@ -31,18 +31,19 @@ function classNames(...classes: string[]) {
 }
 
 export default function Filters() {
+  const r = useRef<any>();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const make = new Set(...[searchParams.get("make")?.split(",")]);
-  const type = new Set(...[searchParams.get("type")?.split(",")]);
+  const [make, setMake] = useState(new Set(...[searchParams.get("make")?.split(",")]));
+  const [type, setType] = useState(new Set(...[searchParams.get("type")?.split(",")]));
   let accident = parseInt(String(searchParams.get("history")));
   const [sort, setSort] = useState<string>("");
   const [cars, setCars] = useState<Car[]>([]);
   const [year, setYear] = useState<number[]>([2010, 2024]);
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-
-  const [filters] = useState([
+  console.log("rereneder");
+  const [filters, setFilters] = useState([
     {
       id: "make",
       name: "Make",
@@ -177,11 +178,15 @@ export default function Filters() {
                                           if (sectionIdx === 0) make.add(val.target.value);
                                           else if (sectionIdx === 1) type.add(val.target.value);
                                           else accident = 1;
+                                          option.checked = true;
                                         } else {
                                           if (sectionIdx === 0) make.delete(val.target.value);
                                           else if (sectionIdx === 1) type.delete(val.target.value);
                                           else accident = 0;
+                                          option.checked = false;
                                         }
+
+                                        if (r.current) r.current();
                                       }}
                                     />
                                     <label
@@ -318,7 +323,7 @@ export default function Filters() {
 
                 {filters.map((section, sectionIdx) => (
                   <Disclosure as="div" key={section.id} className="border-b border-gray-100 py-6">
-                    {({ open }) => (
+                    {({ open, close }) => (
                       <>
                         <h3 className="-my-3 flow-root">
                           <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
@@ -348,11 +353,15 @@ export default function Filters() {
                                       if (sectionIdx === 0) make.add(val.target.value);
                                       else if (sectionIdx === 1) type.add(val.target.value);
                                       else accident = 1;
+                                      option.checked = true;
                                     } else {
                                       if (sectionIdx === 0) make.delete(val.target.value);
                                       else if (sectionIdx === 1) type.delete(val.target.value);
                                       else accident = 0;
+                                      option.checked = false;
                                     }
+                                    console.log(make);
+                                    r.current = close;
                                   }}
                                 />
                                 <label

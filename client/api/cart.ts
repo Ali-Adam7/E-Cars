@@ -1,4 +1,3 @@
-const URL = process.env.NEXT_URL || "http://localhost:3000";
 export const addCar = async (cartID: number, carID: number, quantity: number, token: string): Promise<void> => {
   try {
     for (let i = 0; i < quantity; i++) {

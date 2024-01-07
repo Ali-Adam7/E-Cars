@@ -7,7 +7,7 @@ export default function Deals(params: any) {
           {params?.products?.map((product: any) => (
             <div key={product.id} className="group relative">
               <div className="aspect-h-5 aspect-w-8 w-full overflow-hidden rounded-lg bg-gray-200 ">
-                <img src={product.img} className="h-full w-full  object-center group-hover:opacity-75" />
+                <img src={`/cars/${product.id}.jpg`} className="h-full w-full  object-center group-hover:opacity-75" />
               </div>
 
               <div className="mt-4 flex justify-between">

@@ -25,7 +25,7 @@ export default function ReviewClient({ car }: any) {
       };
       await postReview(review, car.id);
       toast.success("Review Posted");
-      Router.refresh();
+      window.location.href = `/cars/${car.id}`;
       setOpen(false);
     } else toast.error("Add a review and rating");
   };

@@ -5,24 +5,21 @@ const callouts = [
   {
     name: "Sedan",
     description: "You will love driving it",
-    imageSrc:
-      "https://media.ed.edmunds-media.com/tesla/model-s/2019/oem/2019_tesla_model-s_sedan_performance_fq_oem_1_1600.jpg",
+    imageSrc: "/sedan.jpg",
     imageAlt: "Desk with leather desk pad, walnut desk organizer, wireless keyboard and mouse, and porcelain mug.",
     href: `cars?type=Sedan`,
   },
   {
     name: "SUV",
     description: "For Room and Comfort",
-    imageSrc:
-      "https://assets-eu-01.kc-usercontent.com/3b3d460e-c5ae-0195-6b86-3ac7fb9d52db/1ce5ecec-cb1e-4be7-918f-b1d89e2967f9/Tesla%20Model%20X%20%283%29.jpg?fm=jpg&auto=format",
+    imageSrc: "/suv.jpg",
     imageAlt: "Wood table with porcelain mug, leather journal, brass pen, leather key ring, and a houseplant.",
     href: `cars?type=SUV`,
   },
   {
     name: "Trucks",
     description: "Built for Life on the Road, Heavy-Duty Trucks",
-    imageSrc:
-      "https://hips.hearstapps.com/hmg-prod/images/tesla-cybertruck-101-1574400035.jpg?crop=0.669xw:1.00xh;0.167xw,0&resize=640:*",
+    imageSrc: "truck.jpg",
     imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
     href: `cars?type=Truck`,
   },
@@ -35,11 +32,7 @@ export default function Landing() {
       <div aria-hidden="true" className="absolute inset-0 hidden sm:flex sm:flex-col">
         <div className="relative w-full flex-1 bg-gray-800">
           <div className="absolute inset-0 overflow-hidden">
-            <img
-              src="https://theoxfordmagazine.com/wp-content/uploads/electirc-car-charging-01-1920x1080-1.jpg"
-              alt=""
-              className="h-full w-full object-cover object-center"
-            />
+            <img src="/background.jpg" alt="" className="h-full w-full object-cover object-center" />
           </div>
           <div className="absolute inset-0 bg-gray-900 opacity-50" />
         </div>
@@ -51,11 +44,7 @@ export default function Landing() {
         <div aria-hidden="true" className="absolute inset-0 flex flex-col sm:hidden">
           <div className="relative w-full flex-1 bg-gray-800">
             <div className="absolute inset-0 overflow-hidden">
-              <img
-                src="https://res.cloudinary.com/dotcom-prod/images/c_fill,f_auto,g_faces:center,q_auto,w_1920/v1/wt-cms-assets/2023/01/y9apkdxej0b9dklgyg1p/asunsetbeachscenetotheleftanelectriccarchargertotherightagrayelectriccar.jpg"
-                alt=""
-                className="h-full w-full object-cover object-center"
-              />
+              <img src="/mobile_background.jpg" alt="" className="h-full w-full object-cover object-center" />
             </div>
             <div className="absolute inset-0 bg-gray-900 opacity-50" />
           </div>
