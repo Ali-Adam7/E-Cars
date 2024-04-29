@@ -95,11 +95,11 @@ const recordSimilarity = (a: any, b: any) => {
   return sum / fields.length;
 };
 
-export default (items: any, query: any) => {
+export default (items: Car[], query: Car) => {
   const fitlered = items.filter((item: Car) => item.id != query.id);
   var maxSim = 0;
   var result = null;
-  const map = new Map();
+  const map = new Map<Car, number>();
   for (var i = 0; i < fitlered.length; i++) {
     var item = fitlered[i];
     var sim = recordSimilarity(item, query);

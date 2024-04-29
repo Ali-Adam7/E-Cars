@@ -3,11 +3,11 @@ import ReviewsClient from "./ReviewsClient";
 import CarClient from "./CarClient";
 import { getCarById, getRecommendation } from "@/api/catalog";
 import { recordView } from "@/api/analytics";
-import Products from "../Products";
+import Products from "../../../components/Cars";
 import { redirect } from "next/navigation";
 export default async function CarID({ params }: { params: { slug: string } }) {
   const id = parseInt(params.slug);
-  const car = (await getCarById(id)) as Car;
+  const car = await getCarById(id);
   if (!car) redirect("/cars");
   recordView(id);
   const recommend = await getRecommendation(car);

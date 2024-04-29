@@ -5,7 +5,7 @@ export const signIn = async (email: String, password: String): Promise<User | nu
     headers: { "Content-Type": "application/json" },
   });
   if (res.status == 404) return null;
-  return res.json();
+  return (await res.json()) as User;
 };
 
 export const registerUser = async (user: Partial<User>): Promise<User | null> => {
@@ -15,7 +15,7 @@ export const registerUser = async (user: Partial<User>): Promise<User | null> =>
       body: JSON.stringify(user),
       headers: { "Content-Type": "application/json" },
     });
-    if (res.status == 201) return await res.json();
+    if (res.status == 201) return (await res.json()) as User;
     return null;
   } catch {
     return null;

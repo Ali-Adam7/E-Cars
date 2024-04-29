@@ -19,7 +19,7 @@ export const getCart = async (cartID: number, token: string): Promise<Car[]> => 
       body: JSON.stringify({ token: token }),
       headers: { "Content-Type": "application/json" },
     });
-    if (cart.status == 200) return cart.json();
+    if (cart.status == 200) return (await cart.json()) as Car[];
     return [];
   } catch (error) {
     return [];

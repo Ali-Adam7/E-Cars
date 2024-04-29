@@ -1,6 +1,4 @@
-import All from "./components/CarPictures";
-import Footer from "./components/Footer";
-import Front from "./components/Landing";
+import Front from "../components/Landing";
 
 export default async function Main() {
   // initilize cart
@@ -10,7 +8,6 @@ export default async function Main() {
         <header className="relative bg-white"></header>
       </div>
       <Front />
-      <All />
     </div>
   );
 }

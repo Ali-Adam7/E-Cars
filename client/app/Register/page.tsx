@@ -16,7 +16,7 @@ export default function Register() {
 
   if (user.token && !checkout) window.location.href = "/";
 
-  const register = async (event: any) => {
+  const register = async (event: React.FormEvent) => {
     if (!password) return;
     event.preventDefault();
     const registeredUser: Partial<User> = {

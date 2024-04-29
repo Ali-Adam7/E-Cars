@@ -1,17 +1,15 @@
 "use client";
-import { Fragment, useEffect, useState, useCallback } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
-  Bars3Icon,
   ChevronDownIcon,
   CursorArrowRaysIcon,
   FingerPrintIcon,
-  MagnifyingGlassIcon,
   PlayCircleIcon,
   ShoppingBagIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import { useSelector, useDispatch } from "react-redux";
-import store, { RootState } from "../../store/store";
+import { useSelector } from "react-redux";
+import store, { RootState } from "../store/store";
 import { Transition, Dialog, Popover } from "@headlessui/react";
 import { emptyCart, initialize, removeFromCart } from "@/store/cartSlice";
 import { getCart, removeCar } from "@/api/cart";
@@ -21,10 +19,11 @@ import { logOut } from "@/store/userSlice";
 
 const callsToAction = [{ name: "Sign Out", href: "#", icon: PlayCircleIcon }];
 
-export default function Navbar() {
+export default function Cart() {
   const user = useSelector((state: RootState) => state.user);
   const cart = useSelector((state: RootState) => state.cart);
   const Router = useRouter();
+
   const logout = () => {
     store.dispatch(emptyCart());
     store.dispatch(logOut());
@@ -46,7 +45,6 @@ export default function Navbar() {
       store.dispatch(initialize(cart));
     }
   };
-  // get items from DB:
   useEffect(() => {
     initializeCart();
   }, []);
@@ -62,129 +60,99 @@ export default function Navbar() {
   const [showCart, setShowCart] = useState<boolean>(false);
   try {
     return (
-      <nav aria-label="Top" className="bg-white mx-auto  px-4 sm:px-6 lg:px-8 ">
-        <div className="bg-white ">
-          <div className="bg-white flex h-16 items-center">
-            {/* Logo */}
+      <>
+        <div className=" ml-auto flex items-center">
+          {user.firstName ? (
+            <Popover className="relative">
+              <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
+                <span>{user.firstName}</span>
+                <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+              </Popover.Button>
 
-            <div className="flex 	 ">
-              <Link href="/">
-                <span className="sr-only">Your Company</span>
-                <img className="h-16 " src="/logo.png" alt="" />
-              </Link>
-              <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6 ml-6">
-                <Link href="/cars" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Shop
-                </Link>
-                <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                <Link href="/cars/hotdeals" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Deals
-                </Link>
-                <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-
-                <Link href="/calculator" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                  Loan Calculator
-                </Link>
-              </div>
-            </div>
-
-            <div className=" ml-auto flex items-center">
-              {user.firstName ? (
-                <Popover className="relative">
-                  <Popover.Button className="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900">
-                    <span>{user.firstName}</span>
-                    <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
-                  </Popover.Button>
-
-                  <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-200"
-                    enterFrom="opacity-0 translate-y-1"
-                    enterTo="opacity-100 translate-y-0"
-                    leave="transition ease-in duration-150"
-                    leaveFrom="opacity-100 translate-y-0"
-                    leaveTo="opacity-0 translate-y-1"
-                  >
-                    <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
-                      <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-                        <div className="p-4">
-                          {solutions.map((item) => (
-                            <div
-                              key={item.name}
-                              className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50"
-                            >
-                              <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                                <item.icon
-                                  className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
-                                  aria-hidden="true"
-                                />
-                              </div>
-                              <div>
-                                <Link href={item.href} className="font-semibold text-gray-900">
-                                  {item.name}
-                                  <span className="absolute inset-0" />
-                                </Link>
-                                <p className="mt-1 text-gray-600">{item.description}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="grid grid-cols-1 divide-x  divide-gray-900/5 bg-gray-50">
-                          {callsToAction.map((item) => (
-                            <button
-                              key={item.name}
-                              onClick={logout}
-                              className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100"
-                            >
-                              <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-200"
+                enterFrom="opacity-0 translate-y-1"
+                enterTo="opacity-100 translate-y-0"
+                leave="transition ease-in duration-150"
+                leaveFrom="opacity-100 translate-y-0"
+                leaveTo="opacity-0 translate-y-1"
+              >
+                <Popover.Panel className="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
+                  <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                    <div className="p-4">
+                      {solutions.map((item) => (
+                        <div key={item.name} className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                          <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                            <item.icon
+                              className="h-6 w-6 text-gray-600 group-hover:text-indigo-600"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div>
+                            <Link href={item.href} className="font-semibold text-gray-900">
                               {item.name}
-                            </button>
-                          ))}
+                              <span className="absolute inset-0" />
+                            </Link>
+                            <p className="mt-1 text-gray-600">{item.description}</p>
+                          </div>
                         </div>
-                      </div>
-                    </Popover.Panel>
-                  </Transition>
-                </Popover>
-              ) : (
-                <div className=" flex flex-1 items-center justify-end space-x-4">
-                  <Link href="/signin" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Sign in
-                  </Link>
-                  <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
-                  <Link href="/register" className="text-sm font-medium text-gray-700 hover:text-gray-800">
-                    Register
-                  </Link>
-                </div>
-              )}
+                      ))}
+                    </div>
+                    <div className="grid grid-cols-1 divide-x  divide-gray-900/5 bg-gray-50">
+                      {callsToAction.map((item) => (
+                        <button
+                          key={item.name}
+                          onClick={logout}
+                          className="flex items-center justify-center gap-x-2.5 p-3 font-semibold text-gray-900 hover:bg-gray-100"
+                        >
+                          <item.icon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+                          {item.name}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </Popover.Panel>
+              </Transition>
+            </Popover>
+          ) : (
+            <div className=" flex flex-1 items-center justify-end space-x-4">
+              <Link href="/signin" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                Sign in
+              </Link>
+              <span className="h-6 w-px bg-gray-200" aria-hidden="true" />
+              <Link href="/register" className="text-sm font-medium text-gray-700 hover:text-gray-800">
+                Register
+              </Link>
+            </div>
+          )}
 
-              <div className="hidden lg:ml-8 lg:flex">
-                <Link href="#" className="flex items-center text-gray-700 hover:text-gray-800">
-                  <img
-                    src="https://tailwindui.com/img/flags/flag-canada.svg"
-                    alt=""
-                    className="block h-auto w-5 flex-shrink-0"
-                  />
-                  <span className="ml-3 block text-sm font-medium">CAD</span>
-                </Link>
-              </div>
-              {/* Cart */}
-              <div className=" ml-4 flow-root lg:ml-6">
-                <div
-                  className="group -m-2 flex items-center p-2"
-                  onClick={() => {
-                    setShowCart(true);
-                  }}
-                >
-                  <ShoppingBagIcon
-                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                    {cart?.reduce((accumulator, currentValue) => accumulator + currentValue.quantity, 0)}
-                  </span>
-                  <span className="sr-only">items in cart, view bag</span>
-                </div>
-              </div>
+          <div className="hidden lg:ml-8 lg:flex">
+            <Link href="#" className="flex items-center text-gray-700 hover:text-gray-800">
+              <img
+                src="https://tailwindui.com/img/flags/flag-canada.svg"
+                alt=""
+                className="block h-auto w-5 flex-shrink-0"
+              />
+              <span className="ml-3 block text-sm font-medium">CAD</span>
+            </Link>
+          </div>
+          {/* Cart */}
+          <div className=" ml-4 flow-root lg:ml-6">
+            <div
+              className="group -m-2 flex items-center p-2"
+              onClick={() => {
+                setShowCart(true);
+              }}
+            >
+              <ShoppingBagIcon
+                className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                aria-hidden="true"
+              />
+              <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                {cart?.reduce((accumulator, currentValue) => accumulator + currentValue.quantity, 0)}
+              </span>
+              <span className="sr-only">items in cart, view bag</span>
             </div>
           </div>
         </div>
@@ -320,7 +288,7 @@ export default function Navbar() {
             </div>
           </Dialog>
         </Transition.Root>{" "}
-      </nav>
+      </>
     );
   } catch {
     store.dispatch(initialize([]));

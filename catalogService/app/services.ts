@@ -154,6 +154,6 @@ export const loanCalcualtor: RequestHandler = async (req, res) => {
   }
 };
 export const getRecommendation: RequestHandler = async (req, res) => {
-  const car = req.body;
+  const car = req.body as Car;
   res.json(recommenderSystem(await allCars, car));
 };

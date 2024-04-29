@@ -2,9 +2,9 @@
 
 import store, { RootState } from "@/store/store";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { logIn } from "@/store/userSlice";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "@/api/auth";
 import { initialize } from "@/store/cartSlice";
 import { addCar } from "@/api/cart";
@@ -14,10 +14,9 @@ export default function SignIn() {
   const user = useSelector((state: RootState) => state.user);
   const guestCart = useSelector((state: RootState) => state.cart);
   const checkout = Boolean(useSearchParams().get("checkout"));
-  const Router = useRouter();
   if (user.token && !checkout) window.location.href = "/";
 
-  const login = async (event: any) => {
+  const login = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const loggedInUser = await signIn(email, password);

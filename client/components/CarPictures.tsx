@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import Image from "next/image";
 export default function CarPictures() {
   const incentives = [
     {
@@ -49,35 +49,35 @@ export default function CarPictures() {
               Trusted by the world’s most innovative teams
             </h2>
             <div className="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
-              <img
+              <Image
                 className="col-span-2 max-h-24 w-full object-contain lg:col-span-1"
                 src="/tesla.jpg"
                 alt="Transistor"
                 width={158}
                 height={48}
               />
-              <img
+              <Image
                 className="col-span-2 max-h-24 w-full object-contain lg:col-span-1"
                 src="/merc.jpg"
                 alt="Reform"
                 width={158}
                 height={48}
               />
-              <img
+              <Image
                 className="col-span-2 max-h-24 w-full object-contain lg:col-span-1"
                 src="/bmw.jpg"
                 alt="Tuple"
                 width={158}
                 height={48}
               />
-              <img
+              <Image
                 className="col-span-2 max-h-24 w-full object-contain sm:col-start-2 lg:col-span-1"
-                src="lucid.jpg"
+                src="/lucid.jpg"
                 alt="SavvyCal"
                 width={158}
                 height={48}
               />
-              <img
+              <Image
                 className="col-span-2 col-start-2 max-h-24 w-full object-contain sm:col-start-auto lg:col-span-1"
                 src="/xpeng.jpg"
                 alt="Statamic"
@@ -91,7 +91,7 @@ export default function CarPictures() {
           <div className="relative bg-gray-900">
             {/* Decorative image and overlay */}
             <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
-              <img src="deal.jpg" alt="" className="h-full w-full object-cover object-center" />
+              <Image src="/deal.jpg" alt="" fill className="h-full w-full object-cover object-center" />
             </div>
             <div aria-hidden="true" className="absolute inset-0 bg-gray-900 opacity-50" />
 
@@ -122,7 +122,7 @@ export default function CarPictures() {
                   </p>
                 </div>
                 <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg bg-gray-100">
-                  <img src="car.jpg" alt="" className="object-cover object-center" />
+                  <Image src="/car.jpg" alt="" fill className="object-cover object-center" />
                 </div>
               </div>
               <div className="mt-16 grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-3">

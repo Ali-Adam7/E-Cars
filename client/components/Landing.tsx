@@ -1,6 +1,6 @@
 import Link from "next/link";
-import Chat from "./Chat";
-
+import Cars from "../components/CarPictures";
+import Image from "next/image";
 const callouts = [
   {
     name: "Sedan",
@@ -19,7 +19,7 @@ const callouts = [
   {
     name: "Trucks",
     description: "Built for Life on the Road, Heavy-Duty Trucks",
-    imageSrc: "truck.jpg",
+    imageSrc: "/truck.jpg",
     imageAlt: "Collection of four insulated travel bottles on wooden shelf.",
     href: `cars?type=Truck`,
   },
@@ -28,11 +28,10 @@ export default function Landing() {
   return (
     <div className="relative bg-white">
       {/* Background image and overlap */}
-      <Chat />
       <div aria-hidden="true" className="absolute inset-0 hidden sm:flex sm:flex-col">
         <div className="relative w-full flex-1 bg-gray-800">
           <div className="absolute inset-0 overflow-hidden">
-            <img src="/background.jpg" alt="" className="h-full w-full object-cover object-center" />
+            <img src="/background.jpg" alt="" />
           </div>
           <div className="absolute inset-0 bg-gray-900 opacity-50" />
         </div>
@@ -76,7 +75,10 @@ export default function Landing() {
               <div>
                 <div aria-hidden="true" className="absolute inset-0 overflow-hidden rounded-lg">
                   <div className="absolute inset-0 overflow-hidden group-hover:opacity-75">
-                    <img
+                    <Image
+                      placeholder="blur"
+                      blurDataURL="/blur.jpg"
+                      fill
                       src={collection.imageSrc}
                       alt={collection.imageAlt}
                       className="h-full w-full object-cover object-center"
@@ -102,6 +104,7 @@ export default function Landing() {
           ))}
         </div>
       </section>
+      <Cars />
     </div>
   );
 }

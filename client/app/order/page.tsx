@@ -15,16 +15,12 @@ export default function Example() {
   const Router = useRouter();
   const user = useSelector((state: RootState) => state.user);
   const cart = useSelector((state: RootState) => state.cart);
-
   const fname = useRef<string>(user.firstName);
   const lname = useRef<string>(user.lastName);
   const address = useRef<string>(user.address);
   const email = useRef<string>(user.email);
-  const card = useRef<string>();
-  const ccv = useRef<string>();
-  const expiry = useRef<string>();
 
-  const order = async (event: any) => {
+  const order = async (event: React.FormEvent) => {
     event.preventDefault();
     let res;
     if (user.id) res = await submitOrder(user.id, user.token);

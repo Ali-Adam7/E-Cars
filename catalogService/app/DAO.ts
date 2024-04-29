@@ -18,12 +18,19 @@ export class DAO {
     }
   };
 
-  getByFilter = async (filters: any): Promise<Car[]> => {
+  getByFilter = async (filters: any): Promise<{ cars: Car[]; count: number }> => {
     try {
-      const { yeargt, yearlt, ...fields } = filters;
-      return (await prisma.car.findMany({
+      const { yeargt, yearlt, page, sort, ...fields } = filters;
+      const cars = (await prisma.car.findMany({
         where: { ...fields, year: { gte: parseInt(yeargt), lte: parseInt(yearlt) } },
+        take: 3,
+        skip: parseInt(page) * 3,
+        orderBy: JSON.parse(sort),
       })) as Car[];
+      const count = await prisma.car.count({
+        where: { ...fields, year: { gte: parseInt(yeargt), lte: parseInt(yearlt) } },
+      });
+      return { cars: cars, count: count / 3 };
     } catch (error: any) {
       throw error;
     }

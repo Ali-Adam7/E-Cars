@@ -1,13 +1,21 @@
 import Link from "next/link";
-export default function Deals(params: any) {
+import Image from "next/image";
+export default function Cars(params: { products: Car[] }) {
   return (
     <div className="bg-white h-full">
       <div className="mx-auto max-w-2xl px-4 py-5 sm:px-6 sm:py-3 lg:max-w-7xl lg:px-8 bg-white">
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-          {params?.products?.map((product: any) => (
+        <div className="mt-6 grid grid-cols-3 gap-x-6 gap-y-10 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 xl:gap-x-8">
+          {params?.products?.map((product: Car) => (
             <div key={product.id} className="group relative">
               <div className="aspect-h-5 aspect-w-8 w-full overflow-hidden rounded-lg bg-gray-200 ">
-                <img src={`/cars/${product.id}.jpg`} className="h-full w-full  object-center group-hover:opacity-75" />
+                <Image
+                  alt={""}
+                  placeholder="blur"
+                  blurDataURL="/blur.jpg"
+                  fill
+                  src={`/cars/${product.id}.jpg`}
+                  className="h-full w-full  object-center group-hover:opacity-75"
+                />
               </div>
 
               <div className="mt-4 flex justify-between">

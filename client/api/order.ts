@@ -12,14 +12,14 @@ export const submitOrder = async (userID: number, token: string) => {
   }
 };
 
-export const getOrders = async (userID: number, token: string): Promise<[]> => {
+export const getOrders = async (userID: number, token: string): Promise<Order[]> => {
   try {
     const response = await fetch(`/aws/orders/${userID}`, {
       method: "PUT",
       body: JSON.stringify({ token: token }),
       headers: { "Content-Type": "application/json" },
     });
-    if (response.status === 200) return await response.json();
+    if (response.status === 200) return (await response.json()) as Order[];
     return [];
   } catch {
     return [];

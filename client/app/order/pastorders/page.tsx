@@ -5,7 +5,7 @@ import { RootState } from "@/store/store";
 import { getOrders } from "@/api/order";
 
 export default function Example() {
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const user = useSelector((state: RootState) => state.user);
   const get = async () => {
     if (user?.id) {
@@ -19,7 +19,7 @@ export default function Example() {
   }, []);
 
   return (
-    <div className="bg-white h-full">
+    <div className="bg-white h-screen">
       <main className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 lg:pb-24">
         <div className="max-w-xl">
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Order history</h1>
@@ -32,7 +32,7 @@ export default function Example() {
           </h2>
 
           <div className="space-y-20">
-            {orders.map((order: any) => (
+            {orders.map((order: Order) => (
               <div key={order.id}>
                 <h3 className="sr-only">
                   Order placed on <time dateTime="Nov">{"Nov"}</time>
@@ -48,7 +48,7 @@ export default function Example() {
                       <dd className="sm:mt-1">
                         $
                         {order.items?.reduce(
-                          (accumulator: any, currentValue: { price: number }) => accumulator + currentValue.price,
+                          (accumulator: number, currentValue: { price: number }) => accumulator + currentValue.price,
                           0
                         )}
                       </dd>
@@ -78,7 +78,7 @@ export default function Example() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 border-b border-gray-200 text-sm sm:border-t">
-                    {order.items.map((product: any) => (
+                    {order.items.map((product) => (
                       <tr key={product.id}>
                         <td className="py-6 pr-8">
                           <div className="flex items-center">

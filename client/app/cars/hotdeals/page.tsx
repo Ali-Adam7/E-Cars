@@ -7,7 +7,7 @@ export default async function deals() {
   const carsOnSale = await getDeals();
 
   return (
-    <div className="bg-white h-full">
+    <div className="bg-white h-screen">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-10">Hot Deals:</h2>
 
